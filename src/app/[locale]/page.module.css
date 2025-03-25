@@ -1,0 +1,60 @@
+.page {
+    width: 100vw;
+    height:200vh;
+    margin: 0;
+    padding: 0;
+  }
+  .header{
+    width: 100vw;
+    height: 15vh;
+    display: flex;
+
+  }
+  .main{
+    width: 100vw;
+    height: 170vh;
+  }
+  .firstPage{
+    width: 100vw;
+    height: 85vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+  .secondPage{
+    width: 100vw;
+    height: 85vh;
+  }
+  .footer{
+    width: 100vw;
+    height: 15vh;
+  }
+  .plus {
+    position: relative;
+    width: 18.5vh;            
+    height: 18.5vh;            
+    display: inline-flex;      
+  }
+  
+  .plusHorizontal {
+    position: absolute;
+    width: 100%;              
+    height: 1.5vw;              
+    background: currentColor;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+  }
+  
+  .plusVertical {
+    position: absolute;
+    width: 1.5vw;               
+    height: 100%;             
+    background: currentColor;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+  }
