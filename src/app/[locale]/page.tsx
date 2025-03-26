@@ -1,42 +1,8 @@
-// import styles from "./page.module.css";
-// import { useParams } from 'next/navigation';
-// import { getLocalizedContent } from '@/lib/i18n';
-
-// export  default async function Home({
-//   params
-// }: {
-//   params: { locale: string }
-// }){
-//   const {locale} = await params
-//   const content =  getLocalizedContent( locale , 'default');
-//   return (
-//   <div className={styles.page}>
-//     <header className={styles.header}>
-//         <h2>
-//           EMDATA            
-//         </h2>
-//         <div className="buttons_container">
-//           <button>
-//             {content["login"]}
-//           </button>
-//           <button>
-//             {content["signUp"]}
-//           </button>
-//         </div>
-//     </header>
-//     <main className={styles.main}>
-      
-//     </main>
-//     <footer className={styles.footer}>
-      
-//     </footer>
-//   </div>
-//   );
-// }
 // app/[locale]/page.tsx
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import styles from "./page.module.css";
 import { getLocalizedContent } from '@/lib/i18n';
+import Footer from "@/components/Footer";
 
 export default async function Home({
   params
@@ -46,7 +12,7 @@ export default async function Home({
   const content = await getLocalizedContent((await params).locale, 'default');
   
   // Debug what you're receiving
-  console.log('Page received content:', content);
+  //console.log('Page received content:', content);
   
   return (
     <div className={styles.page}>
@@ -71,12 +37,10 @@ export default async function Home({
             </div>
         </div>
         <div className={styles.secondPage}>
-          
+          {/* whatever something about us*/}
         </div>
       </main>
-      <footer className={styles.footer}>
-        
-      </footer>
+      <Footer/>
     </div>
   );
 }
