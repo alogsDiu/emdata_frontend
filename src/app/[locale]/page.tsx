@@ -1,15 +1,20 @@
 // app/[locale]/page.tsx
-import LanguageSwitcher from "@/components/LanguageSwitcher";
+import LanguageSwitcher from "@/components/general/LanguageSwitcher";
 import styles from "./page.module.css";
 import { getLocalizedContent } from '@/lib/i18n';
-import Footer from "@/components/Footer";
+import Footer from "@/components/general/Footer";
+import Link from "next/link";
+
+type locale = Promise<{ locale: string }>;
 
 export default async function Home({
   params
 }: {
-  params: { locale: string }
+  params: locale
 }) {
-  const content = await getLocalizedContent((await params).locale, 'default');
+  let locale = (await params).locale
+
+  const content = await getLocalizedContent( locale, 'default');
   
   // Debug what you're receiving
   //console.log('Page received content:', content);
@@ -20,12 +25,12 @@ export default async function Home({
         <h2>EMDATA</h2>
         <LanguageSwitcher/>
         <div className="buttons_container">
-          <button>
+          <Link href={`/${locale}/login`} className={styles.headerButton}>
             {content.login}
-          </button>
-          <button>
+          </Link>
+          <Link href={`/${locale}/signup`} className={styles.headerButton}>
             {content.signUp}
-          </button>
+          </Link>
         </div>
       </header>
       <main className={styles.main}>

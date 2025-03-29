@@ -1,10 +1,10 @@
 // lib/i18n.ts
 export async function getLocalizedContent(locale: string, page: string) {
-  console.log(`Attempting to load: ${locale}/${page}`); // Debug log
+  // console.log(`Attempting to load: ${locale}/${page}`); // Debug log
   
   try {
     const content = await import(`../locales/${locale}/${page}.json`);
-    console.log('Loaded content:', content.default); // Debug log
+    // console.log('Loaded content:', content.default); // Debug log
     return content.default;
   } catch (error) {
     console.error(`Error loading ${locale}/${page}:`, error);

@@ -1,6 +1,6 @@
-import LanguageSwitcher from "@/components/LanguageSwitcher";
+import LanguageSwitcher from "@/components/general/LanguageSwitcher";
 import styles from "./page.module.css";
-import Footer from "@/components/Footer";
+import Footer from "@/components/general/Footer";
 
 export default async function Auth({
     children
@@ -10,6 +10,10 @@ export default async function Auth({
 
     return (
       <div className={styles.page}>
+        <header>
+          <h2>EMDATA</h2>
+          <LanguageSwitcher/>
+        </header>
         {children}
         <Footer/>
       </div>
