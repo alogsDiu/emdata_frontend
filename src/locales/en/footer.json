@@ -1,0 +1,18 @@
+{
+    "contactHeading": "Contact Information",
+    "faqHeading": "FAQ",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone",
+    "addressLabel": "Address",
+    "supportHoursLabel": "Support Hours",
+    "socialMediaLabel": "Social Media",
+    "faqItems": [
+      ["Is my personal data safe and anonymous?","/"],
+      ["Who can contribute their medical analyses?","/"],
+      ["What types of medical data can I submit?","/"],
+      ["Can I delete my data after submission?","/"],
+      ["What can the data be used for?","/"],
+      ["Who can access the anonymized data?","/"]
+    ],
+    "copyright": "© {year} EmData. All rights reserved."
+}

@@ -3,20 +3,32 @@
 
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import styles from './page.module.css'; // Create this CSS Module
+// *** CHANGE CSS IMPORT ***
+import styles from './SignUpForm.module.css'; // Use its own CSS module
+import Link from 'next/link'; // Import Link if needed within the form (though usually outside)
+import { MdOutlineEmail } from 'react-icons/md'; // Email Icon
+import { RiLockPasswordLine } from 'react-icons/ri'; // Lock Icon
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa"; // Visibility Icons
 
-// Assuming SignUpContent interface is defined/imported
+// Assuming SignUpContent interface is defined/imported from page.tsx or a types file
 interface SignUpContent {
-    title: string;
+    title?: string; // Title is likely rendered in the parent page component
     emailLabel: string;
     emailPlaceholder: string;
     passwordLabel: string;
     passwordPlaceholder?: string;
-    confirmPasswordLabel?: string; // Optional based on JSON content
-    confirmPasswordPlaceholder?: string; // Optional based on JSON content
+    confirmPasswordLabel?: string;
+    confirmPasswordPlaceholder?: string;
     submitButton: string;
     loadingText?: string;
-    passwordMismatchError?: string; // Optional localized error message
+    passwordMismatchError?: string;
+}
+
+// Keep existing interfaces if needed
+interface SignupApiResponse{
+    token: string;
+    message?: string;
+    user?: { id: string; };
 }
 
 interface SignUpFormProps {
@@ -31,16 +43,18 @@ export default function SignUpForm({ content, locale }: SignUpFormProps) {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    // State for password visibility
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPasswordToggle, setShowConfirmPasswordToggle] = useState(false); // Separate state for confirm field
 
-    // FIX APPLIED HERE: Ensure showConfirmPassword is a boolean
-    const showConfirmPassword = !!(content.confirmPasswordLabel && content.confirmPasswordPlaceholder);
+    // Check if confirm password field should be shown based on content prop
+    const shouldShowConfirmField = !!(content.confirmPasswordLabel);
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setError(null);
 
-        // Basic client-side validation using the boolean showConfirmPassword
-        if (showConfirmPassword && password !== confirmPassword) {
+        if (shouldShowConfirmField && password !== confirmPassword) {
             setError(content.passwordMismatchError || "Passwords do not match.");
             return;
         }
@@ -48,72 +62,125 @@ export default function SignUpForm({ content, locale }: SignUpFormProps) {
         setIsLoading(true);
 
         try {
-            // --- API Call ---
-            const response = await fetch('/api/auth/signup', {
+            const response = await fetch('/api/auth/signup', { // Ensure API route is correct
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
             });
 
-             if (!response.ok) {
+            if (!response.ok) {
                 let errorMessage = "Sign up failed. Please try again.";
-                 try { const errorData = await response.json(); errorMessage = errorData.message || errorMessage; } catch (parseError) {}
-                 throw new Error(errorMessage);
+                try { const errorData = await response.json(); errorMessage = errorData.message || errorMessage; } catch (parseError) {}
+                throw new Error(errorMessage);
             }
 
-            // --- Handle Success ---
-            router.push(`/${locale}/login?signedUp=true`);
+            const responseData = await response.json() as SignupApiResponse;
+            const token = responseData.token;
+            const AUTH_TOKEN_KEY = 'authToken';
 
+            try {
+                localStorage.setItem(AUTH_TOKEN_KEY, token);
+                const redirectPath = `/${locale}/dashboard`; // Adjust destination
+                router.push(redirectPath);
+            } catch (storageError) {
+                console.error("Failed to store auth token:", storageError);
+                setError("Could not save your session. Please try again.");
+            }
         } catch (err) {
-             setError(err instanceof Error ? err.message : String(err));
+            setError(err instanceof Error ? err.message : String(err));
         } finally {
             setIsLoading(false);
         }
     };
 
     return (
+        // Use the specific form style from SignUpForm.module.css
         <form onSubmit={handleSubmit} className={styles.form}>
-             {error && <p className={styles.errorMessage}>{error}</p>}
+            {error && <p className={styles.errorMessage}>{error}</p>}
 
-            {/* ... email input (required is fine here) */}
-             <div className={styles.formGroup}>
-                <label htmlFor="signup-email">{content.emailLabel}</label>
-                <input
-                    type="email" id="signup-email" name="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                    placeholder={content.emailPlaceholder} required disabled={isLoading}
-                />
-            </div>
-
-            {/* ... password input (required is fine here) */}
-            <div className={styles.formGroup}>
-                <label htmlFor="signup-password">{content.passwordLabel}</label>
-                <input
-                    type="password" id="signup-password" name="password" value={password} onChange={(e) => setPassword(e.target.value)}
-                    placeholder={content.passwordPlaceholder} required minLength={8} disabled={isLoading}
-                />
-            </div>
-
-            {/* Conditional rendering block */}
-            {showConfirmPassword && (
-                <div className={styles.formGroup}>
-                    <label htmlFor="confirm-password">{content.confirmPasswordLabel}</label>
+            {/* Email Field with Icon */}
+            <div className={styles.inputGroup}>
+                <label htmlFor="signup-email" className={styles.label}>{content.emailLabel}</label>
+                <div className={styles.inputWrapper}>
+                    <MdOutlineEmail aria-hidden="true" className={styles.inputIcon} />
                     <input
-                        type="password"
-                        id="confirm-password"
-                        name="confirmPassword"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        placeholder={content.confirmPasswordPlaceholder}
-                        // THIS NOW WORKS because showConfirmPassword is guaranteed to be true/false
-                        required={showConfirmPassword}
+                        type="email"
+                        id="signup-email"
+                        name="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder={content.emailPlaceholder}
+                        required
                         disabled={isLoading}
+                        className={styles.input} // Apply input style
                     />
+                </div>
+            </div>
+
+            {/* Password Field with Icon and Toggle */}
+            <div className={styles.inputGroup}>
+                <label htmlFor="signup-password" className={styles.label}>{content.passwordLabel}</label>
+                <div className={styles.inputWrapper}>
+                    <RiLockPasswordLine aria-hidden="true" className={styles.inputIcon} />
+                    <input
+                        type={showPassword ? "text" : "password"} // Toggle type
+                        id="signup-password"
+                        name="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder={content.passwordPlaceholder || ''}
+                        required
+                        minLength={8} // Keep validation
+                        disabled={isLoading}
+                        className={styles.input} // Apply input style
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className={styles.visibilityToggle}
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      disabled={isLoading}
+                    >
+                      {showPassword ? <FaRegEyeSlash aria-hidden="true"/> : <FaRegEye aria-hidden="true"/>}
+                    </button>
+                </div>
+            </div>
+
+            {/* Confirm Password Field (Conditional) */}
+            {shouldShowConfirmField && (
+                <div className={styles.inputGroup}>
+                    <label htmlFor="confirm-password" className={styles.label}>
+                        {content.confirmPasswordLabel}
+                    </label>
+                    <div className={styles.inputWrapper}>
+                         <RiLockPasswordLine aria-hidden="true" className={styles.inputIcon} />
+                        <input
+                            type={showConfirmPasswordToggle ? "text" : "password"} // Separate toggle type
+                            id="confirm-password"
+                            name="confirmPassword"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            placeholder={content.confirmPasswordPlaceholder || ''}
+                            required={shouldShowConfirmField} // Required only if shown
+                            disabled={isLoading}
+                            className={styles.input} // Apply input style
+                        />
+                         <button
+                          type="button"
+                          onClick={() => setShowConfirmPasswordToggle(!showConfirmPasswordToggle)}
+                          className={styles.visibilityToggle}
+                          aria-label={showConfirmPasswordToggle ? "Hide confirm password" : "Show confirm password"}
+                          disabled={isLoading}
+                        >
+                          {showConfirmPasswordToggle ? <FaRegEyeSlash aria-hidden="true"/> : <FaRegEye aria-hidden="true"/>}
+                        </button>
+                    </div>
                 </div>
             )}
 
-            {/* ... submit button */}
+            {/* Submit Button */}
             <button type="submit" disabled={isLoading} className={styles.submitButton}>
-                 {isLoading ? (content.loadingText || 'Signing up...') : content.submitButton}
+                {isLoading ? (content.loadingText || 'Signing up...') : content.submitButton}
             </button>
         </form>
     );

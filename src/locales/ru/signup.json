@@ -1,0 +1,14 @@
+{
+    "title": "Создать аккаунт",
+    "emailLabel": "Адрес электронной почты",
+    "emailPlaceholder": "you@example.com",
+    "passwordLabel": "Пароль",
+    "passwordPlaceholder": "Создайте пароль (мин. 8 символов)",
+    "confirmPasswordLabel": "Подтвердите пароль",
+    "confirmPasswordPlaceholder": "Введите пароль еще раз",
+    "submitButton": "Зарегистрироваться",
+    "loadingText": "Создание аккаунта...",
+    "loginPrompt": "Уже есть аккаунт?",
+    "loginLinkText": "Войти",
+    "passwordMismatchError": "Пароли не совпадают."
+  }

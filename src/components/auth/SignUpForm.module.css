@@ -1,0 +1,122 @@
+/* components/auth/SignUpForm.module.css */
+
+.form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between form groups */
+  }
+  
+  .inputGroup {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #555;
+    margin-bottom: 6px;
+    text-align: left;
+    /* If you want to hide labels visually but keep for screen readers: */
+    /* position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0; */
+  }
+  
+  .inputWrapper {
+    position: relative; /* For positioning the icon */
+    width: 100%;
+  }
+  
+  .inputIcon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999; /* Icon color */
+    font-size: 1.2em; /* Icon size */
+    pointer-events: none; /* Prevent icon from blocking input focus */
+  }
+  
+  .input {
+    width: 100%;
+    padding: 12px 15px 12px 40px; /* Top, Right, Bottom, Left (make space for icon) */
+    border: 1px solid #ccc;
+    border-radius: 6px; /* Slightly rounded corners */
+    font-size: 1rem;
+    box-sizing: border-box; /* Include padding and border in width */
+    transition: border-color 0.2s ease;
+  }
+  
+  .input:focus {
+    outline: none;
+    border-color: #25D0D9; /* Highlight color on focus */
+    box-shadow: 0 0 0 2px rgba(37, 208, 217, 0.2); /* Subtle focus ring */
+  }
+  
+  .visibilityToggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    color: #888; /* Toggle icon color */
+    font-size: 1.2em; /* Adjust icon size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .visibilityToggle:hover {
+      color: #555;
+  }
+  .visibilityToggle:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(37, 208, 217, 0.2); /* Focus ring */
+      border-radius: 4px;
+  }
+  
+  
+  .submitButton {
+    width: 100%;
+    padding: 12px 20px;
+    background-color: #25D0D9; /* Turquoise background */
+    color: #ffffff;
+    border: none;
+    border-radius: 8px; /* Rounded corners */
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+    margin-top: 10px; /* Space above button */
+  }
+  
+  .submitButton:hover:not(:disabled) {
+    background-color: #21b8c0; /* Darker turquoise */
+  }
+  
+  .submitButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .errorMessage {
+    color: #dc3545; /* Red error color */
+    background-color: #f8d7da; /* Light red background */
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    margin-bottom: 15px; /* Space below error */
+    text-align: left;
+  }

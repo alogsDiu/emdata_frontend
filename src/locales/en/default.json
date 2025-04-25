@@ -1,5 +1,15 @@
 {
     "login": "Log in",
     "signUp": "Sign up",
-    "welcome": "Welcome to our platform"
+    "welcome": "Donate your medical data",
+    "header":"About us",
+    "p1":"At EmData, we believe in the power of data to transform healthcare. Our mission is to build the most comprehensive and accessible repository of medical analysis data—donated voluntarily by individuals like you—to empower researchers, developers, and innovators to advance medical science and create better health solutions for everyone.",
+    "p2":"By contributing your medical analyses, you’re not only helping shape the future of healthcare—you’re also gaining valuable personal benefits. Each time you submit data, our system analyzes it in real-time to provide tailored recommendations on which medical specialists to consult, helping you take the next step in your health journey with confidence.",
+    "p3":"We also provide personalized health statistics based on your historical submissions, giving you insights into trends and changes in your health over time.",
+    "p4":"All submitted data is securely stored for future use, ensuring both privacy and utility. Researchers and developers can access anonymized datasets to build smarter, faster, and more accurate tools that improve diagnosis, treatment, and prevention on a global scale.",
+    "p5":"Join us in revolutionizing healthcare—your data today could save lives tomorrow.",
+    "donateHeading": "This Cat Team Can't Do It Alone",
+  "donateDescription": "We're building the future of healthcare—one donation at a time. Help us power research and save lives. Even small amounts go a long way",
+  "donateImageAlt": "Cartoon cat holding a donate sign"
+    
 }

@@ -1,4 +1,168 @@
-.footer{
-    width: 100vw;
-    height: 15vh;
-}
+/* Same :root variables as Option 1 */
+
+/* Container */
+.buttons_container {
+    display: flex;
+    gap: 16px; /* More gap needed for text style */
+    align-items: center;
+    border-bottom: 1px solid var(--medium-gray-border); /* Optional: Line under the whole section */
+    padding-bottom: 4px; /* Space below buttons if border-bottom is used */
+  }
+  
+  /* Base button */
+  .buttons_container button {
+    padding: 4px 2px; /* Minimal vertical padding, small horizontal */
+    font-size: 1rem; /* Normal font size */
+    font-weight: 500;
+    text-transform: uppercase;
+    border: none;
+    border-bottom: 2px solid transparent; /* Placeholder for active state */
+    background-color: transparent; /* No background */
+    color: var(--dark-gray-text);
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease;
+    line-height: 1.5;
+  }
+  
+  /* Hover state */
+  .buttons_container button:hover:not(.active) {
+    color: var(--primary-color); /* Change text color on hover */
+  }
+  
+  /* Focus state */
+  .buttons_container button:focus {
+    outline: none;
+    color: var(--primary-color); /* Indicate focus */
+     /* You might want a subtle background or ring on focus too */
+    background-color: rgba(0, 123, 255, 0.1);
+    border-radius: 3px;
+  }
+  .buttons_container button:focus-visible {
+    outline: none;
+    color: var(--primary-color);
+    background-color: rgba(0, 123, 255, 0.1);
+    border-radius: 3px;
+  }
+  
+  
+  /* Active state */
+  .buttons_container button.active {
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color); /* Underline active */
+    font-weight: 700;
+    cursor: default;
+  }
+
+  .footer {
+    background-color: #f8f9fa; /* Light background for the footer */
+    padding: 40px 0 0; /* Padding top, no padding bottom initially */
+    border-top: 1px solid #e9ecef; /* Subtle top border */
+    color: #495057; /* Default text color */
+    font-size: 0.95rem;
+  }
+  
+  .footerContainer {
+    max-width: 1200px; /* Max width of content */
+    margin: 0 auto; /* Center the container */
+    padding: 0 20px; /* Horizontal padding */
+    display: flex;
+    justify-content: space-between; /* Space out columns */
+    gap: 40px; /* Gap between columns */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  }
+  
+  .footerColumn {
+    flex: 1; /* Allow columns to grow */
+    min-width: 280px; /* Minimum width before wrapping */
+  }
+  
+  .footerHeading {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #343a40; /* Darker heading color */
+    margin-bottom: 20px;
+  }
+  
+  .contactList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Space between contact items */
+  }
+  
+  .contactItem {
+    display: flex;
+    align-items: flex-start; /* Align icon with top of text */
+    gap: 10px; /* Space between icon and text */
+    margin: 0;
+    line-height: 1.6;
+  }
+  
+  .icon {
+    color: #25D0D9; /* Use your theme color */
+    font-size: 1.2em; /* Slightly larger icon */
+    margin-top: 2px; /* Fine-tune vertical alignment */
+    flex-shrink: 0; /* Prevent icon from shrinking */
+  }
+  
+  .contactLink {
+    color: #007bff; /* Standard link color */
+    text-decoration: none;
+  }
+  .contactLink:hover {
+    text-decoration: underline;
+  }
+  
+  .socialIcons {
+    display: flex;
+    gap: 15px; /* Space between social icons */
+    margin-left: 10px; /* Space after "Social Media:" text */
+    align-items: center;
+  }
+  
+  .socialLink {
+    color: #495057; /* Inherit text color or set specific */
+    font-size: 1.3rem; /* Size of social icons */
+    transition: color 0.2s ease;
+  }
+  .socialLink:hover {
+    color: #25D0D9; /* Theme color on hover */
+  }
+  
+  .faqList {
+    list-style: none; /* Remove default list bullets */
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Space between FAQ items */
+  }
+  
+  .faqItem {
+    line-height: 1.6;
+    /* Add styles for links if you use them */
+    /* a { color: #007bff; text-decoration: none; } */
+    /* a:hover { text-decoration: underline; } */
+  }
+  
+  .footerBottomBar {
+    border-top: 1px solid #e9ecef;
+    margin-top: 40px; /* Space above the bottom bar */
+    padding: 15px 20px;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #6c757d; /* Lighter text for copyright */
+  }
+  .footerBottomBar p {
+    margin: 0;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .footerContainer {
+      flex-direction: column; /* Stack columns */
+      gap: 30px;
+    }
+    .footerHeading {
+      margin-bottom: 15px;
+    }
+  }

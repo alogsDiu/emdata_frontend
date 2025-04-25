@@ -1,0 +1,13 @@
+{
+    "title": "Login",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "you@example.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "submitButton": "Login",
+    "loadingText": "Logging in...",
+    "forgotPasswordLinkText": "Forgot Password?",
+    "signUpPrompt": "Don't have an account?",
+    "signUpLinkText": "Sign Up",
+    "invalidCredentialsError": "Invalid email or password. Please try again."
+  }

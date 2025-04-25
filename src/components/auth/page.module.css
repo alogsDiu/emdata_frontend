@@ -1,0 +1,210 @@
+/* Example: src/styles/common-auth.module.css */
+/* Styles shared across Login, SignUp, ForgotPassword forms */
+/* Based on screenshot ...04-15-36.png form appearance */
+
+.form {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Take full width of its container */
+    gap: 1rem; /* Base gap, specific margins added below */
+  }
+  
+  /* Optional: Style for subtitle text below main heading */
+  .subtitle {
+    font-size: 0.95rem;
+    color: #6c757d; /* Lighter grey text */
+    margin-top: -0.5rem; /* Reduce space after H1 */
+    margin-bottom: 1.5rem; /* Space before first input */
+    text-align: center;
+  }
+  
+  .formGroup {
+    display: flex;
+    flex-direction: column;
+    /* Use margin for spacing instead of gap in .form if more control needed */
+    margin-bottom: 0.75rem; /* Spacing below each form group */
+  }
+  
+  /* Label styling - hide if using placeholders only, but keep for accessibility */
+  .formGroup label {
+    /* Example: Visually hide label but keep for screen readers */
+    /* position: absolute; */
+    /* width: 1px; */
+    /* height: 1px; */
+    /* padding: 0; */
+    /* margin: -1px; */
+    /* overflow: hidden; */
+    /* clip: rect(0, 0, 0, 0); */
+    /* white-space: nowrap; */
+    /* border-width: 0; */
+  
+    /* Or style normally if you keep visible labels */
+     font-weight: 500;
+     font-size: 0.9rem;
+     color: #333;
+     margin-bottom: 0.4rem; /* Space if label is visible */
+  }
+  
+  /* Input styling matching the screenshot */
+  .formGroup input[type="email"],
+  .formGroup input[type="password"],
+  .formGroup input[type="text"],
+  .formGroup input[type="username"] { /* Added username type */
+    padding: 0.9rem 1rem; /* Slightly more padding */
+    border: 1px solid #ced4da; /* Light grey border */
+    background-color: #fff; /* Ensure white background */
+    border-radius: 6px; /* Slightly more rounded corners */
+    font-size: 1rem;
+    color: #495057;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  /* Placeholder styling */
+  .formGroup input::placeholder {
+    color: #adb5bd; /* Lighter placeholder text */
+    opacity: 1; /* Ensure it's visible */
+  }
+  
+  .formGroup input:focus {
+    border-color: #80bdff; /* Light blue focus border */
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Standard Bootstrap focus glow */
+    outline: none;
+  }
+  
+  /* Submit button styling matching the screenshot */
+  .submitButton {
+    padding: 0.9rem 1.5rem;
+    border: none;
+    background-color: #000000; /* Black background */
+    color: white;
+    border-radius: 6px; /* Match input rounding */
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-top: 1rem; /* Add space above the button */
+    width: 100%; /* Make button full width */
+  }
+  
+  .submitButton:hover:not(:disabled) {
+    background-color: #333; /* Darker grey on hover */
+  }
+  
+  .submitButton:active:not(:disabled) {
+      transform: translateY(1px);
+  }
+  
+  .submitButton:disabled {
+    background-color: #6c757d; /* Grey disabled color */
+    cursor: not-allowed;
+  }
+  
+  /* Style for secondary action text/link below button */
+  .secondaryAction {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-top: 1.5rem;
+  }
+  
+  .secondaryAction a {
+    color: #007bff; /* Link color */
+    font-weight: 500;
+    text-decoration: none;
+  }
+  
+  .secondaryAction a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Style for the 'or' separator */
+  .separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #adb5bd; /* Light grey text */
+    font-size: 0.85rem;
+    margin: 1.5rem 0; /* Space above and below */
+  }
+  
+  .separator::before,
+  .separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #dee2e6; /* Light grey line */
+  }
+  
+  .separator:not(:empty)::before {
+    margin-right: .5em;
+  }
+  
+  .separator:not(:empty)::after {
+    margin-left: .5em;
+  }
+  
+  
+  /* Style for Google Sign Up Button */
+  .googleButton {
+    display: flex; /* Use flexbox for icon and text alignment */
+    align-items: center;
+    justify-content: center; /* Center content */
+    padding: 0.8rem 1.5rem; /* Adjust padding as needed */
+    border: 1px solid #ced4da; /* Grey border */
+    background-color: #ffffff; /* White background */
+    color: #495057; /* Dark grey text */
+    border-radius: 6px; /* Match other elements */
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    width: 100%; /* Full width */
+    gap: 0.75rem; /* Space between icon and text */
+  }
+  
+  .googleButton:hover {
+    background-color: #f8f9fa; /* Slight grey on hover */
+    border-color: #adb5bd;
+  }
+  
+  /* Style for the Google icon - assumes an <img> or <i> tag */
+  .googleButton img,
+  .googleButton i { /* Adjust selector if using SVG or other element */
+    height: 18px; /* Adjust size */
+    width: 18px;
+  }
+  
+  
+  /* Style for terms text at the bottom */
+  .termsText {
+    text-align: center;
+    font-size: 0.75rem; /* Very small text */
+    color: #6c757d; /* Grey text */
+    margin-top: 2rem; /* Space above terms */
+    line-height: 1.5;
+  }
+  
+  .termsText a {
+    color: #495057; /* Slightly darker link */
+    text-decoration: underline;
+  }
+  
+  .termsText a:hover {
+    color: #000;
+  }
+  
+  
+  /* Common error/success message styling (adjust as needed) */
+  .errorMessage {
+    color: #dc3545;
+    font-size: 0.85rem;
+    text-align: left;
+    margin-top: 0.25rem; /* Space below input */
+  }
+  
+  .successMessage {
+    color: #28a745;
+    font-size: 0.85rem;
+    text-align: left;
+    margin-top: 0.25rem;
+  }
+  

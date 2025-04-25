@@ -1,0 +1,13 @@
+{
+    "title": "Вход",
+    "emailLabel": "Адрес электронной почты",
+    "emailPlaceholder": "you@example.com",
+    "passwordLabel": "Пароль",
+    "passwordPlaceholder": "Введите ваш пароль",
+    "submitButton": "Войти",
+    "loadingText": "Вход...",
+    "forgotPasswordLinkText": "Забыли пароль?",
+    "signUpPrompt": "Нет аккаунта?",
+    "signUpLinkText": "Зарегистрироваться",
+    "invalidCredentialsError": "Неверный email или пароль. Попробуйте снова."
+  }

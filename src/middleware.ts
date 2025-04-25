@@ -15,27 +15,46 @@ function  getLocale(request:NextRequest) {
   return match(languages,locales,"ru")
 }
  
-export function middleware(request:NextRequest) {
+export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+ 
+  // ---- START: Added Check ----
+  // Skip middleware for specific paths (assets, API routes, etc.)
+  if (
+      pathname.startsWith('/_next') ||         // Ignore Next.js internal paths
+      pathname.startsWith('/api') ||           // Ignore API routes
+      /\.(.*)$/.test(pathname) ||           // Ignore files with extensions (e.g., .ico, .png, .svg, .css, .js)
+      pathname === '/favicon.ico'           // Explicitly ignore root favicon
+      // Add any other specific root paths you want to ignore here
+  ) {
+      return; // Let the request proceed without locale modifications
+  }
+  // ---- END: Added Check ----
+
+
   // Check if there is any supported locale in the pathname
-  const { pathname } = request.nextUrl
   const pathnameHasLocale = locales.some(
-    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
-  )
- 
-  if (pathnameHasLocale) return
- 
-  const locale = getLocale(request);//russian if not lang supported 
-  
-  request.nextUrl.pathname = `/${locale}${pathname}` 
-  
-  // e.g. incoming request is /products
-  // The new URL is now /en-US/products
-  return NextResponse.redirect(request.nextUrl)
+      (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
+  );
+
+  if (pathnameHasLocale) {
+      return; // Pathname already has locale, do nothing
+  }
+
+  // Redirect if there is no locale
+  const locale = getLocale(request);
+  const newPathname = `/${locale}${pathname === '/' ? '' : pathname}`; // Handle root path correctly
+
+  request.nextUrl.pathname = newPathname;
+
+  // Redirect to the new URL with the locale prefix
+  return NextResponse.redirect(request.nextUrl);
 }
  
-export const config = {
-  matcher: [
-    // Skip all internal paths (_next)
-    '/((?!_next).*)',
-  ],
-}
+// export const config = {
+//   matcher: [
+//     // Skip all internal paths (_next)
+//     // '/((?!_next).*)',
+//     '/((?!_next/static|_next/image|_next/public|api|.*\\..*).*)',
+//   ],
+// }

@@ -1,0 +1,14 @@
+{
+    "title": "Create Account",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "you@example.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Create a password (min. 8 characters)",
+    "confirmPasswordLabel": "Confirm Password",
+    "confirmPasswordPlaceholder": "Enter password again",
+    "submitButton": "Sign Up",
+    "loadingText": "Creating account...",
+    "loginPrompt": "Already have an account?",
+    "loginLinkText": "Login",
+    "passwordMismatchError": "Passwords do not match."
+  }

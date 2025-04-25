@@ -1,4 +1,135 @@
-.page{
-    width: 100vw;
-    height: 100vh;
+/* app/[locale]/(auth)/page.module.css */
+
+/* Styles for the Auth Layout Component */
+.authPageWrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f8f9fa; /* Light background for the whole auth area */
 }
+
+.authHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 3vw;
+  background-color: #ffffff;
+  border-bottom: 1px solid #eaeaea;
+  width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+.authLogoText {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #25D0D9; /* Turquoise color */
+  text-decoration: none;
+}
+
+.authMainContent {
+    flex-grow: 1; /* Allows content to fill remaining space */
+    display: flex; /* Needed if page content itself needs flex */
+    width: 100%;
+}
+
+/* === Styles for the TWO-COLUMN LAYOUT used by pages === */
+.pageContainer {
+  display: flex;
+  flex-grow: 1; /* Make page container fill the layout's main area */
+  width: 100%;
+  background-color: #ffffff;
+}
+
+.imageColumn {
+  flex: 1 1 50%;   /* <<< 50% basis */
+  position: relative; /* Needed for Image with fill */
+  display: none;    /* Hide on small screens */
+  background-color: #f0f4f7; /* Optional subtle bg for image side */
+  border-radius: 30px;
+}
+@media (min-width: 768px) { .imageColumn { display: block; } } /* Show on medium+ screens */
+
+.formImage {
+  object-fit: contain; /* <<< Use contain */
+  object-position: center center;
+  border-radius: 30px;
+}
+
+.formColumn {
+  flex: 1 1 50%;   /* <<< 50% basis */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 35px; /* Adjust padding */
+  box-sizing: border-box;
+  min-width: 300px; /* Ensure minimum width */
+  background-color: #ffffff; /* Ensure form side is white */
+}
+
+/* Container within form column to control form width */
+.formContainer {
+  width: 100%;
+  max-width: 420px; /* Max width of the form elements area */
+  display: flex;
+  flex-direction: column;
+}
+
+/* === COMMON Form/Text Styles === */
+.title {
+  font-size: 2rem; /* Slightly smaller title */
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 35px; /* More space below title */
+  text-align: left;
+  width: 100%;
+}
+
+.subTitle { /* Style for subtitles like on forgot password */
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 25px;
+    text-align: left;
+    width: 100%;
+    line-height: 1.5;
+}
+
+.links {
+  margin-top: 25px;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.links p { /* Add margin between lines if multiple links */
+    margin-bottom: 10px;
+}
+.links p:last-child {
+    margin-bottom: 0;
+}
+
+/* Common style for links within the .links container */
+.link {
+  color: #25D0D9; /* Your theme color */
+  font-weight: 600;
+  text-decoration: none;
+  margin-left: 5px; /* Space before link */
+}
+.link:hover {
+  text-decoration: underline;
+}
+
+/* Fallback container style (optional) */
+.fallbackContainer {
+    /* ... */
+}
+
+/* Styles for form elements (inputs, buttons) will likely be */
+/* in their respective component CSS modules OR defined globally */
+/* If common, add generic styles here, e.g.: */
+/*
+.formInputWrapper { position: relative; width: 100%; margin-bottom: 20px; }
+.formInput { width: 100%; padding: 12px 15px; ... }
+.formButton { width: 100%; padding: 12px; background-color: #25D0D9; ... }
+*/

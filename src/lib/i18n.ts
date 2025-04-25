@@ -19,10 +19,6 @@ export async function getLocalizedContent(locale: string, page: string) {
       }
     }
     
-    return { 
-      login: 'Login',
-      signUp: 'Sign Up',
-      welcome: 'Welcome'
-    };
+    return null;
   }
 }

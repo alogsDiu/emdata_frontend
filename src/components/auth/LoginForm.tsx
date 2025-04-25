@@ -18,6 +18,15 @@ interface LoginContent {
     // e.g., invalidCredentialsError: string;
 }
 
+interface LoginApiResponse {
+    token: string;
+    message?: string; // Optional message
+    user?: { // Optional user info
+      userName:string;
+      // ... other user fields
+    };
+}
+
 interface LoginFormProps {
     content: LoginContent;
     locale: string; // Pass locale if needed for redirects or API
@@ -55,14 +64,29 @@ export default function LoginForm({ content, locale }: LoginFormProps) {
                  throw new Error(errorMessage);
             }
 
-            // --- Handle Success ---
-            // Optionally parse success data if needed
-            // const data = await response.json();
+            const responseData = await response.json() as LoginApiResponse;
 
-            // Redirect to dashboard or desired page on success
-            // Use locale if your dashboard route is localized e.g., `/${locale}/dashboard`
-            router.push('/dashboard'); // Adjust redirect path as needed
-            // router.refresh(); // Optionally refresh server components
+            const token = responseData.token;
+
+            // --- Handle Success ---
+            const AUTH_TOKEN_KEY = 'authToken'; // Use a consistent key across your app
+
+            try {
+                localStorage.setItem(AUTH_TOKEN_KEY, token);
+                console.log(`Token stored using key: ${AUTH_TOKEN_KEY}`);
+
+                // --- Redirect after successful login and token storage ---
+                setEmail("");
+                setPassword("");
+                const redirectPath = `/${locale}/dashboard`; // Adjust destination
+                router.push(redirectPath);                      
+
+            } catch (storageError) {
+                // Handle potential storage errors (e.g., localStorage full, security restrictions)
+                console.error("Failed to store auth token:", storageError);
+                setError("Could not save your session. Please try again.");
+                // Don't redirect if storage failed
+            }
 
         } catch (err) {
             setError(err instanceof Error ? err.message : String(err));

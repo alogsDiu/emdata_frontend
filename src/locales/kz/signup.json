@@ -1,0 +1,14 @@
+{
+    "title": "Аккаунт құру",
+    "emailLabel": "Электрондық пошта мекенжайы",
+    "emailPlaceholder": "you@example.com",
+    "passwordLabel": "Құпия сөз",
+    "passwordPlaceholder": "Құпия сөз жасаңыз (кемінде 8 таңба)",
+    "confirmPasswordLabel": "Құпия сөзді растаңыз",
+    "confirmPasswordPlaceholder": "Құпия сөзді қайта енгізіңіз",
+    "submitButton": "Тіркелу",
+    "loadingText": "Аккаунт құрылуда...",
+    "loginPrompt": "Аккаунтыңыз бар ма?",
+    "loginLinkText": "Кіру",
+    "passwordMismatchError": "Құпия сөздер сәйкес келмейді."
+  }

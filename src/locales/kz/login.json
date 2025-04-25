@@ -1,0 +1,13 @@
+{
+    "title": "Кіру",
+    "emailLabel": "Электрондық пошта мекенжайы",
+    "emailPlaceholder": "you@example.com",
+    "passwordLabel": "Құпия сөз",
+    "passwordPlaceholder": "Құпия сөзіңізді енгізіңіз",
+    "submitButton": "Кіру",
+    "loadingText": "Кіруде...",
+    "forgotPasswordLinkText": "Құпия сөзді ұмыттыңыз ба?",
+    "signUpPrompt": "Аккаунтыңыз жоқ па?",
+    "signUpLinkText": "Тіркелу",
+    "invalidCredentialsError": "Қате email немесе құпия сөз. Қайталап көріңіз."
+  }
