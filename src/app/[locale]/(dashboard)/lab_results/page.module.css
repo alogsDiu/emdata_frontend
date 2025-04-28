@@ -1,0 +1,227 @@
+.loadingPageContainer {
+    height: 100vh;
+    flex-grow: 1;
+    display: flex; /* Use flexbox to center the content */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    /* Optional: Add a background color or overlay */
+    /* background-color: rgba(255, 255, 255, 0.8); */
+    /* position: fixed; */ /* Uncomment if you want it to cover the whole screen */
+    /* top: 0; left: 0; right: 0; bottom: 0; */
+    /* z-index: 1000; */ /* Ensure it's on top */
+}
+
+/* Styles for the spinner itself */
+.loadingSpinner {
+    border: 8px solid #f3f3f3; /* Light grey border */
+    border-top: 8px solid #3498db; /* Blue border on top (creates the spinner effect) */
+    border-radius: 50%; /* Make it round */
+    width: 60px; /* Size of the spinner */
+    height: 60px; /* Size of the spinner */
+    animation: spin 1s linear infinite; /* Apply the spin animation */
+    /* Optional: Add margin if you have text below it */
+    /* margin-bottom: 20px; */
+}
+
+/* Keyframes for the rotation animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); } /* Start at 0 degrees */
+  100% { transform: rotate(360deg); } /* Rotate a full 360 degrees */
+}
+
+.pageContainer {
+    padding: 20px; /* Add some internal padding */
+    max-width: 1000px; /* Optional: limit max width for better readability */
+    margin: 0 auto; /* Center the content if max-width is set */
+    margin-bottom: 10vh;
+}
+
+.pageTitle {
+    font-size: 2em;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.documentSection {
+    margin-bottom: 40px; /* Space between document type sections */
+}
+
+.sectionTitle {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    color: #555;
+    border-bottom: 1px solid #eee; /* Separator line */
+    padding-bottom: 5px;
+}
+
+.documentList {
+    list-style: none; /* Remove default list bullets */
+    padding: 0;
+    margin: 0;
+}
+
+.documentItem {
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between; /* Space out document name and action */
+    align-items: center;
+    transition: background-color 0.2s ease;
+}
+
+.documentItem:hover {
+    background-color: #f0f0f0;
+}
+
+.documentName {
+    font-weight: bold;
+    color: #333;
+}
+
+.documentActions a {
+    color: #007bff; /* Example link color */
+    text-decoration: none;
+    margin-left: 15px;
+    transition: color 0.2s ease;
+}
+
+.documentActions a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+
+.uploadSection {
+    margin-top: 50px; /* Space above the upload area */
+    border-top: 1px solid #eee;
+    padding-top: 30px;
+}
+
+.uploadTitle {
+     font-size: 1.5em;
+     margin-bottom: 15px;
+     color: #555;
+}
+
+.uploadForm {
+    /* Styles for your upload form or input area */
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    color: #777;
+    cursor: pointer; /* Indicate it's a drop zone or clickable area */
+}
+
+/* Styles for a hidden file input often used with a custom upload area */
+.hiddenFileInput {
+    display: none;
+}
+/* app/(dashboard)/lab_results/page.module.css */
+
+/* Add these styles */
+/* app/(dashboard)/lab_results/page.module.css */
+
+/* Add these styles */
+
+.selectedFilesList {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.selectedFilesList h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    color: #333;
+}
+
+.selectedFilesList ul {
+    list-style: none; /* Remove default list bullets */
+    padding: 0;
+    margin: 0;
+}
+
+.selectedFileItem {
+    display: flex; /* Use flexbox to align name and button */
+    justify-content: space-between; /* Push name and button to ends */
+    align-items: center; /* Vertically center */
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+}
+.selectedFileItem:hover{
+    background-color: #c78983;
+    cursor: pointer;
+}
+
+.selectedFileName {
+    font-weight: normal;
+    color: #333;
+    margin-right: 10px; /* Space between name and button */
+    word-break: break-all; /* Break long file names */
+}
+
+.removeFileButton {
+    background-color: transparent; /* No background */
+    border: none;
+    color: #dc3545; /* Red color for delete */
+    font-size: 1.2em; /* Size of the 'x' */
+    cursor: pointer;
+    padding: 0 5px; /* Add some clickable area */
+    transition: color 0.2s ease;
+}
+
+.removeFileButton:hover {
+    color: #c0392b; /* Darker red on hover */
+    cursor: pointer;
+}
+
+
+.confirmUploadButton {
+    display: block; /* Make it a block element */
+    margin-top: 20px; /* Space above the button */
+    padding: 10px 20px;
+    background-color: #007bff; /* Example blue color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.confirmUploadButton:hover:not(:disabled) {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+.confirmUploadButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.uploadStatusMessage {
+    margin-top: 15px;
+    color: #007bff; /* Blue for status */
+    font-style: italic;
+}
+
+.uploadErrorMessage {
+    margin-top: 15px;
+    color: #dc3545; /* Red for error */
+    font-weight: bold;
+}
+
+.uploadSuccessMessage {
+    margin-top: 15px;
+    color: #28a745; /* Green for success */
+    font-weight: bold;
+}

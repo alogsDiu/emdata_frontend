@@ -1,0 +1,15 @@
+{
+    "pageTitle": "Анализ нәтижелері",
+    "bloodTestsSectionTitle": "Қан анализдері",
+    "urineTestsSectionTitle": "Несеп анализдері",
+    "poopTestsSectionTitle": "Нәжіс анализдері",
+    "noDocumentsMessage": "Құжаттар әлі жүктелмеген.",
+    "viewAction": "Қарау",
+    "uploadSectionTitle": "Жаңа құжатты жүктеу",
+    "uploadFormPrompt": "Құжатты осы жерге сүйреп апарыңыз немесе файл(дарды) таңдау үшін басыңыз.",
+    "selectedFilesTitle": "Таңдалған файлдар:",
+    "confirmUploadButtonText": "Жүктеуді растау",
+    "uploadingMessage": "Файлдар жүктелуде...",
+    "uploadErrorMessage": "Жүктеу қатесі:",
+    "uploadSuccessMessage": "Жүктеу сәтті аяқталды!"
+}

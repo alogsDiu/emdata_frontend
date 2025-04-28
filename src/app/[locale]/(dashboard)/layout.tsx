@@ -1,11 +1,12 @@
 import { getLocalizedContent } from '@/lib/i18n';
 import Sidebar from './components/Sidebar';
 import styles from './page.module.css';
-import Link from 'next/link';
 import { SidebarContent } from '@/types';
+import LanguageSwitcher from '@/components/general/LanguageSwitcher';
+import Image from 'next/image';
+import { DashboardProvider } from './DashboardContext';
 
 type locale = Promise<{ locale: string }>;
-
 
 export default async function DashboardLayout({
   children,
@@ -21,12 +22,31 @@ export default async function DashboardLayout({
         healthStatistics: "Health Statistics",
         summary: "Summary",
         healthNeighbors: "Health Neighbors"
-    } 
-    
+  }
+
   return (
     <div className={styles.DashboardWrapper}>
-      <Sidebar sidebar_content={sidebar_content} /> 
-      {children}    
+      <Sidebar sidebar_content={sidebar_content} locale={locale}/> 
+      <div className={styles.rightPart}>
+        <header className={styles.dashboardHeader}>
+          <div className={styles.languageSwitcherContainer}>
+            {/* LanguageSwitcher component will be rendered here */}
+            <LanguageSwitcher/>
+          </div>
+          <div className={styles.profileElementsController}>
+            <div className={styles.profilePicturePlaceholder}> {/* Added a specific class for the placeholder */}
+              <Image src="/logo.svg" alt="Logo" width={30}  height={30} className={styles.logoIcon} />
+            </div>
+            <h2 className={styles.profileUsername}>Test</h2> {/* Added placeholder text */}
+            <button className={styles.logoutButton}>
+              {locale === "kz" ? "Logout" : (locale === "ru" ? "Выход" : "Шыгу")}
+            </button>
+          </div>
+        </header>
+        <DashboardProvider locale={locale} >
+          {children} {/* This is where your page content (e.g., LabResultsPage) will be rendered by Next.js */}
+        </DashboardProvider>
+      </div>    
     </div>
   );
 }

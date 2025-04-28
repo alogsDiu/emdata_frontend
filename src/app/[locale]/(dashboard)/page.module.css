@@ -1,0 +1,82 @@
+.DashboardWrapper{
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+}
+.rightPart {
+    flex-grow: 1; /* This makes it take up all available space */
+    /* ... other styles like display: flex, flex-direction: column ... */
+}
+/* components.module.css or your header-specific module */
+
+.dashboardHeader {
+    width: 100%; /* Make header take full width */
+    background-color: #f0f0f0; /* Example background color */
+    padding: 10px 20px; /* Add some padding */
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space out children (language switcher and profile) */
+    align-items: center; /* Vertically center items */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow */
+    box-sizing: border-box; /* Include padding in the element's total width */
+  }
+  
+  .languageSwitcherContainer {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .profileElementsController {
+    display: flex; /* Use flexbox to layout picture and username */
+    align-items: center; /* Vertically center picture and username */
+    width: 20%;
+    color: #464646;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+  
+  .profilePicturePlaceholder {
+    width: 40px; /* Example size for profile picture */
+    height: 40px; /* Example size for profile picture */
+    background-color: #ccc; /* Placeholder background color */
+    border-radius: 50%; /* Make it round */
+    margin-right: 10px; /* Space between picture and username */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8em;
+    color: #555;
+    overflow: hidden; /* Hide placeholder text if replaced by image */
+    flex-shrink: 0; /* Prevent shrinking */
+    
+  }
+  
+  .profileUsername {
+    font-size: 1.1em; /* Example font size */
+    color: #333; /* Example text color */
+    margin: 0; /* Remove default margin from h2 */
+    white-space: nowrap; /* Prevent username from wrapping */
+    overflow: hidden; /* Hide overflowing text */
+    text-overflow: ellipsis; /* Add ellipsis for long usernames */
+    cursor: pointer;
+    margin: 0; /* Keep margin 0 if using gap */
+   flex-shrink: 0;
+  }
+  .logoutButton {
+    padding: 8px 15px; /* Add padding inside the button */
+    background-color: #e74c3c; /* Example: Red background for logout */
+    color: white; /* White text */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Slightly rounded corners */
+    cursor: pointer; /* Indicate it's clickable */
+    font-size: 0.9em; /* Slightly smaller font than username */
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+    flex-shrink: 0; /* Prevent shrinking */
+  }
+  
+  .logoutButton:hover {
+    background-color: #c0392b; /* Darker red on hover */
+  }

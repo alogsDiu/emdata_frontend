@@ -1,0 +1,15 @@
+{
+    "pageTitle": "Результаты анализов",
+    "bloodTestsSectionTitle": "Анализы крови",
+    "urineTestsSectionTitle": "Анализы мочи",
+    "poopTestsSectionTitle": "Анализы кала",
+    "noDocumentsMessage": "Документы еще не загружены.",
+    "viewAction": "Просмотреть",
+    "uploadSectionTitle": "Загрузить новый документ",
+    "uploadFormPrompt": "Перетащите документ сюда или нажмите, чтобы выбрать файл(ы).",
+    "selectedFilesTitle": "Выбранные файлы:",
+    "confirmUploadButtonText": "Подтвердить загрузку",
+    "uploadingMessage": "Загрузка файлов...",
+    "uploadErrorMessage": "Ошибка загрузки:",
+    "uploadSuccessMessage": "Загрузка успешно завершена!"
+}

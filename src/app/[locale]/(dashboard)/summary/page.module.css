@@ -1,0 +1,77 @@
+/* app/[locale]/(dashboard)/health_statistics/summary_page.module.css */
+
+.container {
+    padding: 20px;
+    max-width: 800px; /* Limit width for better readability */
+    margin: 0 auto; /* Center the container */
+    font-family: sans-serif; /* Use a common sans-serif font */
+}
+
+.pageTitle {
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.section {
+    margin-bottom: 30px;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.sectionTitle {
+    color: #555;
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+}
+
+.list {
+    list-style: disc inside; /* Use bullet points */
+    padding-left: 0; /* Remove default padding */
+}
+
+.listItem {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.disclaimer {
+    margin-top: 40px;
+    font-size: 0.9em;
+    color: #777;
+    text-align: center;
+    font-style: italic;
+}
+
+.loadingContainer,
+.errorContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Full viewport height */
+}
+
+.loadingSpinner {
+    border: 4px solid #f3f3f3; /* Light grey */
+    border-top: 4px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite; /* Spin animation */
+    margin-bottom: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.errorContainer p {
+    color: red;
+    font-weight: bold;
+}

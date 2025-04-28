@@ -1,0 +1,138 @@
+/* app/(dashboard)/_components/components.module.css */
+
+.sidebarContainer {
+    display: flex;
+    /* We will control the sidebar's width and let the container manage layout */
+    transition: width 0.5s ease; /* Add transition to the container's width */
+    position: relative; /* Needed for absolute positioning of the toggle wrapper */
+    z-index: 1; /* Ensure sidebar is above main content */
+    background-color: #111; /* Background color moved to container for full height */
+    flex-shrink: 0; /* Prevent sidebar from shrinking in flex layout */
+    width: 250px; /* Default expanded width */
+}
+.sidebarContainer.collapsed {
+    width: 60px; /* Collapsed width - adjust based on your icon size */
+}
+
+
+.sidebar {
+    flex-grow: 1; /* Allow sidebar content area to fill container width */
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0; /* Adjust padding as needed */
+    overflow-x: hidden; /* Hide content that overflows when collapsed */
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    padding: 0 20px; /* Match sidebar padding */
+    margin-bottom: 30px; /* Space below logo */
+    transition: all 0.5s ease;
+}
+
+.logoIcon {
+    margin-right: 10px; /* Space between icon and text */
+}
+
+.logoText {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: white;
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Hide text when container is too narrow */
+    text-overflow: ellipsis; /* Add ellipsis if text is truncated */
+}
+
+
+.navigation ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navigation li {
+    margin-bottom: 10px; /* Space between list items */
+}
+
+.link {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px; /* Padding for clickable area */
+    text-decoration: none;
+    color: #aaa; /* Default link color */
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.link:hover {
+    color: white;
+    background-color: #333;
+}
+
+.link.active {
+    color: white;
+    background-color: #057043; /* Highlight color for active link */
+}
+
+.linkIcon {
+    font-size: 1.5em; /* Icon size */
+    margin-right: 15px; /* Space between icon and text */
+    transition: margin-right 0.5s ease;
+}
+
+.sidebarContainer.collapsed .linkIcon {
+     margin-right: 0; /* No space when collapsed - icons only */
+}
+
+.linkLabel {
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Hide text when container is too narrow */
+    text-overflow: ellipsis; /* Add ellipsis if text is truncated */
+    opacity: 1;
+    transition: opacity 0.3s ease 0.2s; /* Delay hiding text slightly */
+}
+
+.sidebarContainer.collapsed .linkLabel {
+    opacity: 0;
+    transition: opacity 0.3s ease; /* Hide text quickly */
+}
+
+
+.sidebarToggleButtonWrapper {
+    position: absolute; /* Position absolutely within the container */
+    right: 0; /* Stick to the right edge of the sidebar container */
+    top: 0;
+    bottom: 0;
+    width: 40px; /* Width of the toggle area */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: #222; Optional: give the button area a different background */
+    cursor: pointer;
+    z-index: 10; /* Ensure button wrapper is above sidebar content */
+}
+.sidebarToggleButtonWrapper:hover{
+    background-color: #383838; /* Background color moved to container for full height */
+}
+
+
+.sidebarToggle {
+    background-color: transparent; /* Transparent background */
+    border: none;
+    color: #aaa; /* Button color */
+    font-size: 1.8em; /* Icon size */
+    cursor: pointer;
+    padding: 5px; /* Padding around the icon */
+    display: flex; /* Use flex to center the icon */
+    justify-content: center;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+.sidebarToggle:hover {
+    color: white;
+}
+
+/* No need for a separate .collapsed class on the button itself if using absolute positioning within the container */
+/* The container's collapsed class handles the button's final position indirectly */
+

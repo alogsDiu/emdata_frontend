@@ -1,0 +1,15 @@
+{
+    "pageTitle": "Lab Results",
+    "bloodTestsSectionTitle": "Blood Tests",
+    "urineTestsSectionTitle": "Urine Tests",
+    "poopTestsSectionTitle": "Poop Tests",
+    "noDocumentsMessage": "No documents uploaded yet.",
+    "viewAction": "View",
+    "uploadSectionTitle": "Upload New Document",
+    "uploadFormPrompt": "Drag and drop your document here, or click to select file(s).",
+    "selectedFilesTitle": "Selected Files:",
+    "confirmUploadButtonText": "Confirm Upload",
+    "uploadingMessage": "Uploading files...",
+    "uploadErrorMessage": "Upload failed:",
+    "uploadSuccessMessage": "Upload successful!"
+}

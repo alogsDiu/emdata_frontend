@@ -1,0 +1,11 @@
+{
+    "pageTitle": "Статистика здоровья",
+    "overallStatsTitle": "Общие показатели",
+    "trendsTitle": "Тенденции здоровья",
+    "chartsPlaceholder": "Графики появятся здесь.",
+    "mostChangeTitle": "Наиболее значительное изменение",
+    "changeLabel": "Изменение:",
+    "noStatsDataMessage": "Нет данных статистики здоровья. Загрузите документ, чтобы увидеть вашу статистику.",
+    "allChangesTitle": "Все изменения",
+    "selectMetricsLabel": "Выберите показатели для графика:"
+}

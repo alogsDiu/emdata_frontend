@@ -1,0 +1,159 @@
+/* app/[locale]/(dashboard)/health_statistics/page.module.css */
+
+/* Styles for the main page container */
+.pageContainer {
+    padding: 20px; /* Add some internal padding */
+    max-width: 1200px; /* Optional: limit max width for better readability */
+    margin: 0 auto; /* Center the content if max-width is set */
+    background-color: #fff; /* Example background */
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Styles for the page title */
+.pageTitle {
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    color: #333;
+    text-align: center;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+}
+
+/* Styles for the container that centers the spinner */
+.loadingPageContainer {
+    height: 100vh; /* Take full viewport height */
+    flex-grow: 1; /* Allow it to fill available space in layout */
+    display: flex; /* Use flexbox to center the content */
+    flex-direction: column; /* Stack spinner and text vertically */
+    justify-content: center; /* Center vertically */
+    align-items: center; /* Center horizontally */
+    /* Optional: Add a background color or overlay */
+    /* background-color: rgba(255, 255, 255, 0.8); */
+    /* position: fixed; */ /* Uncomment if you want it to cover the whole screen */
+    /* top: 0; left: 0; right: 0; bottom: 0; */
+    /* z-index: 1000; */ /* Ensure it's on top */
+}
+
+/* Styles for the spinner itself */
+.loadingSpinner {
+    border: 8px solid #f3f3f3; /* Light grey border */
+    border-top: 8px solid #3498db; /* Blue border on top (creates the spinner effect) */
+    border-radius: 50%; /* Make it round */
+    width: 60px; /* Size of the spinner */
+    height: 60px; /* Size of the spinner */
+    animation: spin 1s linear infinite; /* Apply the spin animation */
+    margin-bottom: 20px; /* Space below the spinner */
+}
+
+/* Keyframes for the rotation animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); } /* Start at 0 degrees */
+  100% { transform: rotate(360deg); } /* Rotate a full 360 degrees */
+}
+
+
+/* Styles for individual statistics sections */
+.statsSection {
+    margin-bottom: 40px; /* Space between sections */
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+/* Styles for section titles */
+.sectionTitle {
+    font-size: 1.8em;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #555;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+/* Styles for the highlight of the most changed metric */
+.mostChangeHighlight {
+    padding: 15px;
+    background-color: #e9f7ef; /* Light green background for positive change highlight */
+    border: 1px solid #d0e9c6;
+    border-radius: 5px;
+    font-size: 1.1em;
+}
+
+/* Style for negative change highlight */
+.mostChangeHighlight p span[style*="red"] {
+   /* The color is set inline, but you could add other styles here */
+   /* font-weight: bold; */
+}
+
+/* Styles for the list of all changes */
+.changesList {
+    list-style: none; /* Remove default list bullets */
+    padding: 0;
+    margin: 0;
+}
+
+/* Styles for individual change items in the list */
+.changeItem {
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between; /* Space out metric name and change details */
+    align-items: center;
+    font-size: 0.95em;
+}
+
+/* Styles for metric selection controls */
+.metricSelectionControls {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.metricSelectionControls label {
+    font-weight: bold;
+    margin-right: 15px;
+    color: #333;
+}
+
+/* Styles for the checkbox group */
+.checkboxGroup {
+    display: flex;
+    flex-wrap: wrap; /* Wrap checkboxes to the next line if needed */
+    gap: 15px; /* Space between checkboxes */
+    margin-top: 10px;
+}
+
+/* Styles for individual checkbox labels */
+.metricCheckboxLabel {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.metricCheckboxLabel input[type="checkbox"] {
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+
+/* Styles for the chart area */
+.chartsArea {
+    width: 100%; /* Ensure chart area takes full width */
+    /* Recharts ResponsiveContainer handles internal sizing */
+}
+
+/* Styles for placeholder text */
+.pageContainer p {
+    color: #777;
+    font-style: italic;
+    text-align: center;
+}

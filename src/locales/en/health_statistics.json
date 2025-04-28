@@ -1,0 +1,11 @@
+{
+    "pageTitle": "Health Statistics",
+    "overallStatsTitle": "Overall Metrics",
+    "trendsTitle": "Health Trends",
+    "chartsPlaceholder": "Charts will appear here.",
+    "mostChangeTitle": "Most Significant Change",
+    "changeLabel": "Change:",
+    "noStatsDataMessage": "No health statistics data available. Upload a document to see your stats.",
+    "allChangesTitle": "All Changes",
+    "selectMetricsLabel": "Select Metrics for Chart:"
+}
