@@ -1,0 +1,215 @@
+/* app/[locale]/(dashboard)/health_neighbors/health_neighbors_page.module.css */
+
+/* Container for the entire page */
+.container {
+    padding: 20px;
+    max-width: 1200px; /* Increase max-width to accommodate graph and chat side-by-side */
+    margin: 0 auto; /* Center the container */
+    font-family: sans-serif; /* Use a common sans-serif font */
+    text-align: center; /* Center content */
+    height: 100vh;
+}
+
+/* Container to hold the graph and chat side-by-side using flexbox */
+.graphAndChatContainer {
+    display: flex; /* Use flexbox for side-by-side layout */
+    gap: 20px; /* Space between graph and chat */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    justify-content: center; /* Center items when they wrap */
+}
+
+/* Container specifically for the SVG graph */
+.graphContainer {
+    margin-top: 20px; /* Adjust margin */
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    display: inline-block; /* Keep inline-block for centering when not in flex */
+    flex-shrink: 0; /* Prevent shrinking in flex layout */
+    /* Adjust width or flex-basis if needed for responsiveness */
+}
+
+/* Styles for the lines connecting nodes in the graph */
+.graphLink {
+    stroke: #999; /* Color of the lines */
+    opacity: 0.6; /* Make lines slightly transparent */
+    /* Stroke width is set inline in the component based on similarity */
+}
+
+/* Grouping element for each node (circle and text) in the SVG */
+.graphNodeGroup {
+    cursor: pointer; /* Indicate interactivity */
+    /* Cursor style is also set inline in the component based on isCentral */
+}
+
+/* Styles for the central user node (circle) */
+.centralNode {
+    fill: #3498db; /* Blue color for the central node */
+    stroke: #fff; /* White border */
+    stroke-width: 2px;
+}
+
+/* Styles for the neighbor nodes (circles) */
+.neighborNode {
+    fill: #2ecc71; /* Green color for neighbor nodes */
+    stroke: #fff; /* White border */
+    stroke-width: 2px;
+}
+
+/* Styles for the text labels below the nodes */
+.nodeLabel {
+    font-size: 12px;
+    fill: #333; /* Dark grey text color */
+    pointer-events: none; /* Don't interfere with mouse events on circles */
+}
+
+/* Styles for the similarity score labels below neighbor names */
+.similarityLabel {
+     font-size: 10px;
+     fill: #555; /* Medium grey text color */
+     pointer-events: none; /* Don't interfere with mouse events */
+}
+
+/* Container for the chat interface */
+.chat {
+    margin-top: 20px; /* Adjust margin */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column; /* Stack header, messages, and input vertically */
+    width: 300px; /* Fixed width for the chat */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    flex-shrink: 0; /* Prevent shrinking in flex layout */
+    /* Add flex-grow if you want chat to take more space when available */
+}
+
+/* Header section of the chat */
+.chatHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    background-color: #f0f0f0; /* Light grey background */
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+/* Title within the chat header */
+.chatHeader h2 {
+    margin: 0;
+    font-size: 1em;
+    color: #333;
+}
+
+/* Button to close the chat */
+.closeChatButton {
+    background: none;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+    color: #777; /* Grey color */
+    padding: 5px;
+    line-height: 1; /* Vertically center the 'X' */
+}
+
+.closeChatButton:hover {
+    color: #333; /* Darker grey on hover */
+}
+
+/* Area where chat messages are displayed */
+.chatMessages {
+    flex-grow: 1; /* Take up available space */
+    padding: 10px;
+    overflow-y: auto; /* Add scroll for messages if they exceed height */
+    height: 300px; /* Fixed height for message area (adjust as needed) */
+    display: flex;
+    flex-direction: column; /* Stack messages vertically */
+}
+
+/* Styling for individual chat messages */
+.message {
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    border-radius: 15px; /* Rounded corners for message bubbles */
+    max-width: 80%; /* Limit message width */
+    word-wrap: break-word; /* Break long words */
+    align-self: flex-start; /* Default alignment for incoming messages (left) */
+    background-color: #e9e9eb; /* Light grey background for incoming */
+}
+
+/* Styling for the user's own messages */
+.myMessage {
+    align-self: flex-end; /* Align user's messages to the right */
+    background-color: #007bff; /* Blue background for user's messages */
+    color: white; /* White text for user's messages */
+}
+
+/* Container for the chat input field and send button */
+.chatInput {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #eee;
+}
+
+/* Styling for the text input field */
+.chatInput input[type="text"] {
+    flex-grow: 1; /* Take up available space */
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+/* Styling for the send button */
+.chatInput button {
+    padding: 8px 15px;
+    background-color: #007bff; /* Blue background */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.chatInput button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+
+/* Loading Spinner Styles (can be reused from summary page) */
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.loadingSpinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.errorContainer {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     height: 100vh;
+}
+
+.errorContainer p {
+    color: red;
+    font-weight: bold;
+}

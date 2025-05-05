@@ -10,5 +10,9 @@
     "loadingText": "Creating account...",
     "loginPrompt": "Already have an account?",
     "loginLinkText": "Login",
-    "passwordMismatchError": "Passwords do not match."
+    "passwordMismatchError": "Passwords do not match.",
+    "usernamePlaceholder":"username",
+    "usernameLabel":"Username",
+    "reg_error":"Registration failed. Please change the username or email and try again.",
+    "successMessage":"Successfully registered! An email has been sent to your address. Please check your inbox (and spam folder) to activate your account."
   }

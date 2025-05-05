@@ -46,7 +46,7 @@ export default function LoginForm({ content, locale }: LoginFormProps) {
 
         try {
             // --- API Call ---
-            const response = await fetch('/api/auth/login', { // Replace with your actual API endpoint
+            const response = await fetch(`${process.env.NEXT_STARTING_BASE}/api/auth/login`, { // Replace with your actual API endpoint
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
@@ -78,7 +78,7 @@ export default function LoginForm({ content, locale }: LoginFormProps) {
                 // --- Redirect after successful login and token storage ---
                 setEmail("");
                 setPassword("");
-                const redirectPath = `/${locale}/dashboard`; // Adjust destination
+                const redirectPath = `/${locale}/health_statistics`; // Adjust destination
                 router.push(redirectPath);                      
 
             } catch (storageError) {

@@ -95,6 +95,7 @@
 .sidebarContainer.collapsed .linkLabel {
     opacity: 0;
     transition: opacity 0.3s ease; /* Hide text quickly */
+    z-index: 999;
 }
 
 
@@ -103,7 +104,7 @@
     right: 0; /* Stick to the right edge of the sidebar container */
     top: 0;
     bottom: 0;
-    width: 40px; /* Width of the toggle area */
+    width: 20px; /* Width of the toggle area */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -127,6 +128,7 @@
     justify-content: center;
     align-items: center;
     transition: color 0.3s ease;
+    height: auto;
 }
 
 .sidebarToggle:hover {

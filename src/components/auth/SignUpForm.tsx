@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 // *** CHANGE CSS IMPORT ***
 import styles from './SignUpForm.module.css'; // Use its own CSS module
 import Link from 'next/link'; // Import Link if needed within the form (though usually outside)
-import { MdOutlineEmail } from 'react-icons/md'; // Email Icon
+import { MdOutlineEmail,MdPersonOutline } from 'react-icons/md'; // Email Icon
 import { RiLockPasswordLine } from 'react-icons/ri'; // Lock Icon
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa"; // Visibility Icons
 
@@ -22,6 +22,10 @@ interface SignUpContent {
     submitButton: string;
     loadingText?: string;
     passwordMismatchError?: string;
+    usernamePlaceholder:string;
+    usernameLabel:string;
+    reg_error:string;
+    successMessage:string;
 }
 
 // Keep existing interfaces if needed
@@ -35,13 +39,18 @@ interface SignUpFormProps {
     content: SignUpContent;
     locale: string;
 }
+function delay(ms:number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 export default function SignUpForm({ content, locale }: SignUpFormProps) {
     const router = useRouter();
     const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     // State for password visibility
     const [showPassword, setShowPassword] = useState(false);
@@ -60,16 +69,16 @@ export default function SignUpForm({ content, locale }: SignUpFormProps) {
         }
 
         setIsLoading(true);
-
+        const role = "USER";
         try {
-            const response = await fetch('/api/auth/signup', { // Ensure API route is correct
+            const response = await fetch(`${process.env.NEXT_PUBLIC_STARTING_BASE}/api/auth/register/`, { // Ensure API route is correct
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ email, password, username,role}),
             });
 
             if (!response.ok) {
-                let errorMessage = "Sign up failed. Please try again.";
+                let errorMessage = content.reg_error;
                 try { const errorData = await response.json(); errorMessage = errorData.message || errorMessage; } catch (parseError) {}
                 throw new Error(errorMessage);
             }
@@ -77,10 +86,13 @@ export default function SignUpForm({ content, locale }: SignUpFormProps) {
             const responseData = await response.json() as SignupApiResponse;
             const token = responseData.token;
             const AUTH_TOKEN_KEY = 'authToken';
+            setSuccess(content.successMessage)
+            
+            await delay(10000);
 
             try {
                 localStorage.setItem(AUTH_TOKEN_KEY, token);
-                const redirectPath = `/${locale}/dashboard`; // Adjust destination
+                const redirectPath = `/${locale}/login`; // Adjust destination
                 router.push(redirectPath);
             } catch (storageError) {
                 console.error("Failed to store auth token:", storageError);
@@ -93,10 +105,20 @@ export default function SignUpForm({ content, locale }: SignUpFormProps) {
         }
     };
 
+    const successStyle = {
+        color: '#2E7D32', // A standard success green color
+        marginTop: '10px', // Add some space above the message
+        padding: '10px',   // Give it some padding
+        border: '1px solid #A5D6A7', // Subtle border
+        borderRadius: '4px',        // Rounded corners
+        backgroundColor: '#E8F5E9' // Light green background
+      };
+
     return (
         // Use the specific form style from SignUpForm.module.css
         <form onSubmit={handleSubmit} className={styles.form}>
             {error && <p className={styles.errorMessage}>{error}</p>}
+            {success && <p style={successStyle}>{success}</p>}
 
             {/* Email Field with Icon */}
             <div className={styles.inputGroup}>
@@ -116,6 +138,24 @@ export default function SignUpForm({ content, locale }: SignUpFormProps) {
                     />
                 </div>
             </div>
+            <div className={styles.inputGroup}>
+            <label htmlFor="signup-username" className={styles.label}>{content.usernameLabel}</label>
+            <div className={styles.inputWrapper}>
+                {/* Replace MdPersonOutline with your desired user icon */}
+                <MdPersonOutline aria-hidden="true" className={styles.inputIcon} />
+                <input
+                    type="text" // Changed type to "text" for username
+                    id="signup-username" // Updated id to match label htmlFor
+                    name="username" // Updated name attribute
+                    value={username} // Bind to your username state variable
+                    onChange={(e) => setUsername(e.target.value)} // Update username state
+                    placeholder={content.usernamePlaceholder} // Use username placeholder text
+                    required // Keep if username is required
+                    disabled={isLoading} // Keep disabled state logic
+                    className={styles.input} // Apply same input style
+                />
+            </div>
+        </div>
 
             {/* Password Field with Icon and Toggle */}
             <div className={styles.inputGroup}>

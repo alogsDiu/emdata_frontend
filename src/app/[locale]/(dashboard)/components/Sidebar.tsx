@@ -56,7 +56,7 @@ export default function Sidebar({ sidebar_content, locale}: SidebarProps) {
                             </Link>
                         </li>
                         <li>
-                            <Link href={`/${locale}/health_statistics`} className={`${styles.link} ${pathname === '/${locale}/health_statistics' ? styles.active : ''}`}>
+                            <Link href={`/${locale}/health_statistics`} className={`${styles.link} ${pathname === `/${locale}/health_statistics` ? styles.active : ''}`}>
                                  <span className={styles.linkIcon}> {/* Add a span for icon */}
                                     📈 {/* Replace with actual icons */}
                                 </span>
@@ -72,7 +72,7 @@ export default function Sidebar({ sidebar_content, locale}: SidebarProps) {
                             </Link>
                         </li>
                         <li>
-                            <Link href={`/${locale}/health_neighboars`} className={`${styles.link} ${pathname === '/${locale}/health_neighboars' ? styles.active : ''}`}>
+                            <Link href={`/${locale}/health_neighboars`} className={`${styles.link} ${pathname === `/${locale}/health_neighboars` ? styles.active : ''}`}>
                                  <span className={styles.linkIcon}> {/* Add a span for icon */}
                                     🤝 {/* Replace with actual icons */}
                                 </span>
@@ -85,7 +85,7 @@ export default function Sidebar({ sidebar_content, locale}: SidebarProps) {
             </div>
 
             {/* Toggle button wrapper remains, but styling changes */}
-            <div className={styles.sidebarToggleButtonWrapper}>
+            <div className={styles.sidebarToggleButtonWrapper} onClick={toggleSidebar}>
                 <button
                     className={styles.sidebarToggle}
                     onClick={toggleSidebar}

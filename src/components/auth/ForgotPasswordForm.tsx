@@ -34,7 +34,7 @@ export default function ForgotPasswordForm({ content, locale }: ForgotPasswordFo
         setMessage(null);
 
         try {
-            const response = await fetch('/api/auth/request-reset', { // Your API endpoint
+            const response = await fetch(`${process.env.NEXT_STARTING_BASE}/api/auth/request-reset`, { // Your API endpoint
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email }),

@@ -10,5 +10,9 @@
     "loadingText": "Создание аккаунта...",
     "loginPrompt": "Уже есть аккаунт?",
     "loginLinkText": "Войти",
-    "passwordMismatchError": "Пароли не совпадают."
+    "passwordMismatchError": "Пароли не совпадают.",
+    "usernamePlaceholder":"username",
+    "usernameLabel":"Имя",
+    "reg_error":"Ошибка регистрации. Измените имя пользователя или Email  и попробуйте снова.",
+    "successMessage":"Успешная регистрация! На ваш адрес отправлено письмо. Пожалуйста, проверьте почту (и папку со спамом), чтобы активировать аккаунт."
   }
