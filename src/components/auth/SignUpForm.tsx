@@ -3,44 +3,32 @@
 
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-// *** CHANGE CSS IMPORT ***
-import styles from './SignUpForm.module.css'; // Use its own CSS module
-import Link from 'next/link'; // Import Link if needed within the form (though usually outside)
-import { MdOutlineEmail,MdPersonOutline } from 'react-icons/md'; // Email Icon
-import { RiLockPasswordLine } from 'react-icons/ri'; // Lock Icon
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa"; // Visibility Icons
+import styles from './SignUpForm.module.css'; // Убедись, что путь верный
+import Link from 'next/link';
+import { MdOutlineEmail, MdPersonOutline } from 'react-icons/md';
+import { RiLockPasswordLine } from 'react-icons/ri';
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
-// Assuming SignUpContent interface is defined/imported from page.tsx or a types file
 interface SignUpContent {
-    title?: string; // Title is likely rendered in the parent page component
+    title?: string;
     emailLabel: string;
     emailPlaceholder: string;
+    usernameLabel: string;
+    usernamePlaceholder: string;
     passwordLabel: string;
     passwordPlaceholder?: string;
-    confirmPasswordLabel?: string;
+    confirmPasswordLabel?: string; // Используем это для password2
     confirmPasswordPlaceholder?: string;
     submitButton: string;
     loadingText?: string;
     passwordMismatchError?: string;
-    usernamePlaceholder:string;
-    usernameLabel:string;
-    reg_error:string;
-    successMessage:string;
-}
-
-// Keep existing interfaces if needed
-interface SignupApiResponse{
-    token: string;
-    message?: string;
-    user?: { id: string; };
+    reg_error?: string;
+    successMessage?: string;
 }
 
 interface SignUpFormProps {
     content: SignUpContent;
     locale: string;
-}
-function delay(ms:number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 export default function SignUpForm({ content, locale }: SignUpFormProps) {
@@ -48,56 +36,67 @@ export default function SignUpForm({ content, locale }: SignUpFormProps) {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState(''); // Для поля подтверждения
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    // State for password visibility
     const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPasswordToggle, setShowConfirmPasswordToggle] = useState(false); // Separate state for confirm field
+    const [showConfirmPasswordToggle, setShowConfirmPasswordToggle] = useState(false);
 
-    // Check if confirm password field should be shown based on content prop
-    const shouldShowConfirmField = !!(content.confirmPasswordLabel);
+    // Поле подтверждения пароля теперь обязательно
+    const shouldShowConfirmField = true;
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setError(null);
+        setSuccess(null);
 
-        if (shouldShowConfirmField && password !== confirmPassword) {
+        if (password !== confirmPassword) {
             setError(content.passwordMismatchError || "Passwords do not match.");
             return;
         }
 
         setIsLoading(true);
-        const role = "USER";
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_STARTING_BASE}/api/auth/register/`, { // Ensure API route is correct
+            // --- API Call ---
+            const apiUrl = `${process.env.NEXT_PUBLIC_STARTING_BASE || ''}/api/auth/registration/`;
+
+            const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password, username,role}),
+                // Отправляем username, email, password и password2
+                body: JSON.stringify({
+                    username,
+                    email,
+                    password1: password,
+                    password2: confirmPassword // Значение из поля подтверждения
+                }),
             });
 
+            const responseData = await response.json();
+
             if (!response.ok) {
-                let errorMessage = content.reg_error;
-                try { const errorData = await response.json(); errorMessage = errorData.message || errorMessage; } catch (parseError) {}
+                let errorMessage = content.reg_error || "Registration failed.";
+                // Извлекаем ошибки
+                if (responseData.username && responseData.username.length > 0) errorMessage = `Username: ${responseData.username[0]}`;
+                else if (responseData.email && responseData.email.length > 0) errorMessage = `Email: ${responseData.email[0]}`;
+                else if (responseData.password && responseData.password.length > 0) errorMessage = `Password: ${responseData.password[0]}`;
+                else if (responseData.password1 && responseData.password1.length > 0) errorMessage = `Password: ${responseData.password1[0]}`; // dj-rest-auth может использовать password1/2
+                else if (responseData.password2 && responseData.password2.length > 0) errorMessage = `Confirm Password: ${responseData.password2[0]}`;
+                else if (responseData.non_field_errors && responseData.non_field_errors.length > 0) errorMessage = responseData.non_field_errors[0];
+                else if (responseData.detail) errorMessage = responseData.detail;
+                else errorMessage = JSON.stringify(responseData);
                 throw new Error(errorMessage);
             }
 
-            const responseData = await response.json() as SignupApiResponse;
-            const token = responseData.token;
-            const AUTH_TOKEN_KEY = 'authToken';
-            setSuccess(content.successMessage)
-            
-            await delay(10000);
+            // --- Handle Success ---
+            setSuccess(content.successMessage || "Registration successful! Please check your email to verify your account.");
+            setEmail('');
+            setUsername('');
+            setPassword('');
+            setConfirmPassword('');
+            // Не перенаправляем
 
-            try {
-                localStorage.setItem(AUTH_TOKEN_KEY, token);
-                const redirectPath = `/${locale}/login`; // Adjust destination
-                router.push(redirectPath);
-            } catch (storageError) {
-                console.error("Failed to store auth token:", storageError);
-                setError("Could not save your session. Please try again.");
-            }
         } catch (err) {
             setError(err instanceof Error ? err.message : String(err));
         } finally {
@@ -106,21 +105,20 @@ export default function SignUpForm({ content, locale }: SignUpFormProps) {
     };
 
     const successStyle = {
-        color: '#2E7D32', // A standard success green color
-        marginTop: '10px', // Add some space above the message
-        padding: '10px',   // Give it some padding
-        border: '1px solid #A5D6A7', // Subtle border
-        borderRadius: '4px',        // Rounded corners
-        backgroundColor: '#E8F5E9' // Light green background
+        color: '#2E7D32',
+        marginTop: '10px',
+        padding: '10px',
+        border: '1px solid #A5D6A7',
+        borderRadius: '4px',
+        backgroundColor: '#E8F5E9'
       };
 
     return (
-        // Use the specific form style from SignUpForm.module.css
         <form onSubmit={handleSubmit} className={styles.form}>
             {error && <p className={styles.errorMessage}>{error}</p>}
             {success && <p style={successStyle}>{success}</p>}
 
-            {/* Email Field with Icon */}
+            {/* Поле Email */}
             <div className={styles.inputGroup}>
                 <label htmlFor="signup-email" className={styles.label}>{content.emailLabel}</label>
                 <div className={styles.inputWrapper}>
@@ -134,45 +132,46 @@ export default function SignUpForm({ content, locale }: SignUpFormProps) {
                         placeholder={content.emailPlaceholder}
                         required
                         disabled={isLoading}
-                        className={styles.input} // Apply input style
+                        className={styles.input}
                     />
                 </div>
             </div>
-            <div className={styles.inputGroup}>
-            <label htmlFor="signup-username" className={styles.label}>{content.usernameLabel}</label>
-            <div className={styles.inputWrapper}>
-                {/* Replace MdPersonOutline with your desired user icon */}
-                <MdPersonOutline aria-hidden="true" className={styles.inputIcon} />
-                <input
-                    type="text" // Changed type to "text" for username
-                    id="signup-username" // Updated id to match label htmlFor
-                    name="username" // Updated name attribute
-                    value={username} // Bind to your username state variable
-                    onChange={(e) => setUsername(e.target.value)} // Update username state
-                    placeholder={content.usernamePlaceholder} // Use username placeholder text
-                    required // Keep if username is required
-                    disabled={isLoading} // Keep disabled state logic
-                    className={styles.input} // Apply same input style
-                />
-            </div>
-        </div>
 
-            {/* Password Field with Icon and Toggle */}
+            {/* Поле Username (Логин) */}
+            <div className={styles.inputGroup}>
+                <label htmlFor="signup-username" className={styles.label}>{content.usernameLabel}</label>
+                <div className={styles.inputWrapper}>
+                    <MdPersonOutline aria-hidden="true" className={styles.inputIcon} />
+                    <input
+                        type="text"
+                        id="signup-username"
+                        name="username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        placeholder={content.usernamePlaceholder}
+                        required
+                        disabled={isLoading}
+                        className={styles.input}
+                    />
+                </div>
+            </div>
+
+            {/* Поле Пароля */}
             <div className={styles.inputGroup}>
                 <label htmlFor="signup-password" className={styles.label}>{content.passwordLabel}</label>
                 <div className={styles.inputWrapper}>
                     <RiLockPasswordLine aria-hidden="true" className={styles.inputIcon} />
                     <input
-                        type={showPassword ? "text" : "password"} // Toggle type
+                        type={showPassword ? "text" : "password"}
                         id="signup-password"
-                        name="password"
+                        name="password" // Имя поля password
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder={content.passwordPlaceholder || ''}
                         required
-                        minLength={8} // Keep validation
+                        minLength={8}
                         disabled={isLoading}
-                        className={styles.input} // Apply input style
+                        className={styles.input}
                     />
                     <button
                       type="button"
@@ -186,39 +185,37 @@ export default function SignUpForm({ content, locale }: SignUpFormProps) {
                 </div>
             </div>
 
-            {/* Confirm Password Field (Conditional) */}
-            {shouldShowConfirmField && (
-                <div className={styles.inputGroup}>
-                    <label htmlFor="confirm-password" className={styles.label}>
-                        {content.confirmPasswordLabel}
-                    </label>
-                    <div className={styles.inputWrapper}>
-                         <RiLockPasswordLine aria-hidden="true" className={styles.inputIcon} />
-                        <input
-                            type={showConfirmPasswordToggle ? "text" : "password"} // Separate toggle type
-                            id="confirm-password"
-                            name="confirmPassword"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            placeholder={content.confirmPasswordPlaceholder || ''}
-                            required={shouldShowConfirmField} // Required only if shown
-                            disabled={isLoading}
-                            className={styles.input} // Apply input style
-                        />
-                         <button
-                          type="button"
-                          onClick={() => setShowConfirmPasswordToggle(!showConfirmPasswordToggle)}
-                          className={styles.visibilityToggle}
-                          aria-label={showConfirmPasswordToggle ? "Hide confirm password" : "Show confirm password"}
-                          disabled={isLoading}
-                        >
-                          {showConfirmPasswordToggle ? <FaRegEyeSlash aria-hidden="true"/> : <FaRegEye aria-hidden="true"/>}
-                        </button>
-                    </div>
+            {/* Поле Подтверждения Пароля (password2) */}
+            <div className={styles.inputGroup}>
+                <label htmlFor="confirm-password" className={styles.label}>
+                    {content.confirmPasswordLabel || 'Confirm Password'}
+                </label>
+                <div className={styles.inputWrapper}>
+                     <RiLockPasswordLine aria-hidden="true" className={styles.inputIcon} />
+                    <input
+                        type={showConfirmPasswordToggle ? "text" : "password"}
+                        id="confirm-password"
+                        name="password2" // Имя поля password2
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder={content.confirmPasswordPlaceholder || ''}
+                        required // Обязательно
+                        disabled={isLoading}
+                        className={styles.input}
+                    />
+                     <button
+                      type="button"
+                      onClick={() => setShowConfirmPasswordToggle(!showConfirmPasswordToggle)}
+                      className={styles.visibilityToggle}
+                      aria-label={showConfirmPasswordToggle ? "Hide confirm password" : "Show confirm password"}
+                      disabled={isLoading}
+                    >
+                      {showConfirmPasswordToggle ? <FaRegEyeSlash aria-hidden="true"/> : <FaRegEye aria-hidden="true"/>}
+                    </button>
                 </div>
-            )}
+            </div>
 
-            {/* Submit Button */}
+            {/* Кнопка Отправки */}
             <button type="submit" disabled={isLoading} className={styles.submitButton}>
                 {isLoading ? (content.loadingText || 'Signing up...') : content.submitButton}
             </button>

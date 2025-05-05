@@ -8,8 +8,8 @@ import { MdOutlineEmail } from 'react-icons/md'; // Import email icon
 
 // Keep interface definition
 interface ForgotPasswordContent {
-    title?: string; // Title usually rendered by parent page
-    description?: string; // Description usually rendered by parent page
+    title?: string;
+    description?: string;
     emailLabel: string;
     emailPlaceholder: string;
     submitButton: string;
@@ -20,7 +20,7 @@ interface ForgotPasswordContent {
 
 interface ForgotPasswordFormProps {
     content: ForgotPasswordContent;
-    locale: string;
+    locale: string; // Не используется здесь, но оставлено для консистентности
 }
 
 export default function ForgotPasswordForm({ content, locale }: ForgotPasswordFormProps) {
@@ -34,26 +34,38 @@ export default function ForgotPasswordForm({ content, locale }: ForgotPasswordFo
         setMessage(null);
 
         try {
-            const response = await fetch(`${process.env.NEXT_STARTING_BASE}/api/auth/request-reset`, { // Your API endpoint
+            // --- ИЗМЕНЕНИЕ ЗДЕСЬ: Используем стандартный URL dj-rest-auth ---
+            const apiUrl = `${process.env.NEXT_PUBLIC_STARTING_BASE || ''}/api/auth/password/reset/`;
+            console.log("Forgot Password API URL:", apiUrl); // Отладка
+
+            const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email }),
             });
 
-            if (!response.ok) {
-                let errorMessage = content.errorMessage || 'Failed to send reset link. Please try again.';
-                try {
-                    // Attempt to get more specific error from backend if available
-                    const errorData = await response.json();
-                    errorMessage = errorData.message || errorMessage;
-                } catch (parseError) {
-                     // Ignore parsing error, use default message
-                }
-                throw new Error(errorMessage);
+            // dj-rest-auth обычно возвращает 200 OK даже если email не найден,
+            // чтобы не раскрывать информацию о существовании email.
+            // Но он может вернуть 400, если email невалиден.
+            if (!response.ok && response.status !== 400) { // Обрабатываем неожидаемые ошибки сервера
+                 throw new Error(content.errorMessage || `Server error: ${response.status}`);
             }
 
+            const responseData = await response.json();
+
+            // Проверяем на ошибки валидации (например, невалидный email)
+            if (response.status === 400 && responseData.email) {
+                 throw new Error(responseData.email[0]);
+            }
+             // Если ответ не ОК, но не 400 с ошибкой email, считаем общей ошибкой
+             else if (!response.ok) {
+                 throw new Error(content.errorMessage || `Failed to send reset link. Status: ${response.status}`);
+             }
+
+
+            // Вне зависимости от того, найден email или нет, показываем общее сообщение
             setMessage({ type: 'success', text: content.successMessage || 'If an account with that email exists, a password reset link has been sent.' });
-            // setEmail(''); // Keep email or clear it based on preference
+            // setEmail(''); // Оставляем email в поле для удобства
 
         } catch (error) {
             console.error("Forgot Password Error:", error);
@@ -64,7 +76,6 @@ export default function ForgotPasswordForm({ content, locale }: ForgotPasswordFo
     };
 
     return (
-        // Use styles from ForgotPasswordForm.module.css
         <form onSubmit={handleSubmit} className={styles.form}>
             {message && (
                 <p className={`${styles.message} ${message.type === 'error' ? styles.errorMessage : styles.successMessage}`}>
@@ -75,7 +86,6 @@ export default function ForgotPasswordForm({ content, locale }: ForgotPasswordFo
             {/* Email Field with Icon */}
             <div className={styles.inputGroup}>
                 <label htmlFor="reset-email" className={styles.label}>{content.emailLabel}</label>
-                 {/* *** ADD WRAPPER AND ICON *** */}
                 <div className={styles.inputWrapper}>
                     <MdOutlineEmail aria-hidden="true" className={styles.inputIcon} />
                     <input

@@ -1,0 +1,13 @@
+{
+    "pageTitle": "Жаңа Құпия Сөзді Орнату",
+    "newPasswordLabel": "Жаңа Құпия Сөз",
+    "newPasswordPlaceholder": "Жаңа құпия сөзіңізді енгізіңіз",
+    "confirmPasswordLabel": "Жаңа Құпия Сөзді Растаңыз",
+    "confirmPasswordPlaceholder": "Жаңа құпия сөзіңізді растаңыз",
+    "submitButton": "Құпия Сөзді Қалпына Келтіру",
+    "loadingText": "Өңдеу...",
+    "successMessage": "Құпия сөз сәтті қалпына келтірілді. Кіру бетіне бағытталуда...",
+    "errorMessage": "Құпия сөзді қалпына келтіру мүмкін болмады. Сілтеме жарамсыз немесе мерзімі өткен болуы мүмкін.",
+    "passwordMismatchError": "Құпия сөздер сәйкес келмейді.",
+    "backToLoginLinkText": "Кіруге Оралу"
+}

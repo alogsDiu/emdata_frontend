@@ -1,0 +1,13 @@
+{
+    "pageTitle": "Установить Новый Пароль",
+    "newPasswordLabel": "Новый Пароль",
+    "newPasswordPlaceholder": "Введите ваш новый пароль",
+    "confirmPasswordLabel": "Подтвердите Новый Пароль",
+    "confirmPasswordPlaceholder": "Подтвердите ваш новый пароль",
+    "submitButton": "Сбросить Пароль",
+    "loadingText": "Обработка...",
+    "successMessage": "Пароль успешно сброшен. Перенаправляем на страницу входа...",
+    "errorMessage": "Не удалось сбросить пароль. Ссылка может быть недействительной или устаревшей.",
+    "passwordMismatchError": "Пароли не совпадают.",
+    "backToLoginLinkText": "Вернуться к Входу"
+}
