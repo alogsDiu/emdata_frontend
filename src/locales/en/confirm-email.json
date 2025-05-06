@@ -1,0 +1,10 @@
+{
+    "pageTitle": "Confirm Your Email Address",
+    "description": "Click the button below to activate your account.",
+    "confirmButtonText": "Confirm Email",
+    "loadingText": "Confirming...",
+    "successMessage": "Email confirmed successfully! Redirecting to login...",
+    "errorMessage": "Failed to confirm email. The link might be invalid or expired.",
+    "invalidKeyError": "Invalid confirmation link.",
+    "backToLoginLinkText": "Back to Login"
+  }
