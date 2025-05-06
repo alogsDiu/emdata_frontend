@@ -54,17 +54,20 @@ export default function ConfirmEmailForm({ content, locale, confirmationKey }: C
 
         try {
             // --- ИСПРАВЛЕНИЕ ЗДЕСЬ: Используем стандартный URL dj-rest-auth ---
-            const apiUrl = `${process.env.NEXT_PUBLIC_STARTING_BASE || ''}/api/auth/registration/verify-email/`;
+            const apiUrl = `${process.env.NEXT_PUBLIC_STARTING_BASE || ''}/api/registration/verify-email/`;
             // ---------------------------------------------------------------
             console.log("Confirm Email API URL:", apiUrl);
 
+            console.log("Confirmation Key:", confirmationKey);
             const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ key: confirmationKey }), // Отправляем ключ
             });
-
-            const responseData: ConfirmEmailApiResponse = await response.json();
+            console.log("Response Status:", response.status);
+            const responseData = await response.json();
+            console.log("Response Data:", responseData);
+            
 
             if (!response.ok) {
                 let errorMessage = content.errorMessage || 'Email confirmation failed.';
