@@ -32,7 +32,7 @@ interface LoginFormProps {
     locale: string;
 }
 
-export default function LoginForm({ content, locale }: LoginFormProps) {
+export default function LoginDeveloperForm({ content, locale }: LoginFormProps) {
     const router = useRouter();
     const [loginIdentifier, setLoginIdentifier] = useState('');
     const [password, setPassword] = useState('');
@@ -101,7 +101,7 @@ export default function LoginForm({ content, locale }: LoginFormProps) {
 
                 setLoginIdentifier("");
                 setPassword("");
-                const redirectPath = `/${locale}/health_statistics`;
+                const redirectPath = `/${locale}/developer`;
                 
                 router.push(redirectPath);
             } catch (storageError) {

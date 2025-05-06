@@ -1,0 +1,18 @@
+{
+    "pageTitle": "Developer Settings",
+    "apiAccessTitle": "API Access",
+    "yourApiKeyLabel": "Your API Key:",
+    "regenerateApiKeyButtonText": "Regenerate Key",
+    "apiKeyRegeneratedSuccess": "New API key generated successfully!",
+    "loadingMessage": "Loading settings...",
+    "errorMessage": "Failed to load settings.",
+    "noDeveloperAccessMessage": "Developer access is not enabled for your account.",
+    "dataDownloadTitle": "Download Your Health Data",
+    "startDateLabel": "Start Date:",
+    "endDateLabel": "End Date:",
+    "downloadButtonText": "Download Data",
+    "downloadingMessage": "Preparing data...",
+    "noFilteredDataMessage": "No data available for the selected date range.",
+    "apiKeySaveReminder": "Please save your API key. It will not be shown again."
+  }
+  

@@ -1,0 +1,14 @@
+{
+    "title": "Login as Developer",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "you@example.com",
+    "loginPlaceholder":"blabla@example.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "submitButton": "Login",
+    "loadingText": "Logging in...",
+    "forgotPasswordLinkText": "Forgot Password?",
+    "signUpPrompt": "You should create a User account in order to be able to enter. If you have not please create one ...",
+    "signUpLinkText": "Sign Up",
+    "invalidCredentialsError": "Invalid email or password. Please try again."
+  }

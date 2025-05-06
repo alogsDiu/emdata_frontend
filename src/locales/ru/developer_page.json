@@ -1,0 +1,18 @@
+{
+    "pageTitle": "Настройки разработчика",
+    "apiAccessTitle": "Доступ к API",
+    "yourApiKeyLabel": "Ваш ключ API:",
+    "regenerateApiKeyButtonText": "Сгенерировать ключ",
+    "apiKeyRegeneratedSuccess": "Новый ключ API успешно сгенерирован!",
+    "loadingMessage": "Загрузка настроек...",
+    "errorMessage": "Не удалось загрузить настройки.",
+    "noDeveloperAccessMessage": "Доступ разработчика для вашей учетной записи не включен.",
+    "dataDownloadTitle": "Скачать ваши данные о здоровье",
+    "startDateLabel": "Дата начала:",
+    "endDateLabel": "Дата окончания:",
+    "downloadButtonText": "Скачать данные",
+    "downloadingMessage": "Подготовка данных...",
+    "noFilteredDataMessage": "Нет данных за выбранный период дат.",
+    "apiKeySaveReminder": "Пожалуйста, сохраните ваш ключ API. Он больше не будет показан."
+  }
+  

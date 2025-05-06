@@ -96,7 +96,8 @@ export default function SignUpForm({ content, locale }: SignUpFormProps) {
             setPassword('');
             setConfirmPassword('');
             // Не перенаправляем
-
+            await new Promise(resolve => setTimeout(resolve, 700));
+            router.push(`/${locale}/login`)
         } catch (err) {
             setError(err instanceof Error ? err.message : String(err));
         } finally {

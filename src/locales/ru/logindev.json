@@ -1,0 +1,14 @@
+{
+  "title": "Вход Developer",
+  "emailLabel": "Адрес электронной почты",
+  "emailPlaceholder": "you@example.com",
+  "passwordLabel": "Пароль",
+  "passwordPlaceholder": "Введите ваш пароль",
+  "submitButton": "Войти",
+  "loadingText": "Вход...",
+  "forgotPasswordLinkText": "Забыли пароль?",
+  "signUpPrompt": "Вам необходимо создать учетную запись пользователя, чтобы войти. Если у вас ее еще нет, пожалуйста, создайте...",
+  "signUpLinkText": "Зарегистрироваться",
+  "loginPlaceholder":"blabla@example.com",
+  "invalidCredentialsError": "Неверный email или пароль. Попробуйте снова."
+}

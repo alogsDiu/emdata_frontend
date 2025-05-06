@@ -1,0 +1,18 @@
+{
+    "pageTitle": "Әзірлеуші параметрлері",
+    "apiAccessTitle": "API кіру",
+    "yourApiKeyLabel": "Сіздің API кілтіңіз:",
+    "regenerateApiKeyButtonText": "Кілтті қайта жасау",
+    "apiKeyRegeneratedSuccess": "Жаңа API кілті сәтті жасалды!",
+    "loadingMessage": "Параметрлер жүктелуде...",
+    "errorMessage": "Параметрлерді жүктеу мүмкін болмады.",
+    "noDeveloperAccessMessage": "Аккаунтыңыз үшін әзірлеуші кіру қосылмаған.",
+    "dataDownloadTitle": "Денсаулық деректеріңізді жүктеп алу",
+    "startDateLabel": "Бастау күні:",
+    "endDateLabel": "Аяқтау күні:",
+    "downloadButtonText": "Деректерді жүктеп алу",
+    "downloadingMessage": "Деректер дайындалуда...",
+    "noFilteredDataMessage": "Таңдалған күн ауқымы үшін деректер жоқ.",
+    "apiKeySaveReminder": "API кілтіңізді сақтап алыңыз. Ол қайта көрсетілмейді."
+  }
+  
