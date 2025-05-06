@@ -1,0 +1,25 @@
+{
+    "pageTitle": "Талдау мәліметтері",
+    "loadingMessage": "Талдау мәліметтері жүктелуде...",
+    "errorMessage": "Талдау мәліметтерін жүктеу мүмкін болмады.",
+    "submissionDetailsTitle": "Жүктеу мәліметтері",
+    "testTypeLabel": "Талдау түрі:",
+    "submissionDateLabel": "Жүктелген күні:",
+    "testDateLabel": "Талдау күні:",
+    "processingStatusLabel": "Өңдеу мәртебесі:",
+    "processingDetailsLabel": "Өңдеу мәліметтері:",
+    "notesLabel": "Ескертпелер:",
+    "originalFileLabel": "Бастапқы файл:",
+    "downloadAction": "Жүктеу",
+    "parsedResultsTitle": "Талданған нәтижелер",
+    "noResultsMessage": "Нәтижелер әлі талданған жоқ.",
+    "analyteNameHeader": "Көрсеткіш",
+    "valueHeader": "Мәні",
+    "unitHeader": "Өлшем бірлігі",
+    "referenceRangeHeader": "Референстік диапазон",
+    "statusHeader": "Мәртебе",
+    "statusNormal": "Қалыпты",
+    "statusAbnormal": "Ауытқу",
+    "statusUnknown": "Белгісіз"
+  }
+  

@@ -1,0 +1,242 @@
+/* app/(dashboard)/lab_results/[submissionId]/page.module.css */
+
+/* Basic container for the entire page */
+.pageContainer {
+    padding: 20px;
+    max-width: 900px; /* Limit width for better readability */
+    margin: 0 auto; /* Center the container */
+    font-family: sans-serif; /* Use a common font */
+    color: var(--text-color-primary, #333); /* Default text color */
+    height: 100vmin;
+}
+
+/* Page title styling */
+.pageTitle {
+    font-size: 2em;
+    margin-bottom: 30px;
+    color: var(--heading-color, #0056b3); /* Default heading color */
+    text-align: center;
+}
+
+/* Loading and Error container styles (reused from list page or define here) */
+.loadingPageContainer, .errorPageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    color: var(--text-color-secondary, #666);
+    font-size: 1.2em;
+}
+
+.loadingSpinner { /* Reused spinner animation */
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid var(--primary-color, #007bff);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.errorMessage { /* Reused error message style */
+    color: var(--danger-color, #dc3545);
+    margin-top: 15px;
+    padding: 10px;
+    background-color: var(--danger-bg, rgba(220, 53, 69, 0.1));
+    border: 1px solid var(--danger-color, #dc3545);
+    border-radius: 4px;
+    text-align: center;
+}
+
+
+/* Styles for sections (Details and Results) */
+.detailsSection, .resultsSection {
+    margin-top: 30px;
+    padding: 20px;
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 8px;
+    background-color: var(--background-color-section, #f8f9fa);
+}
+
+.sectionTitle {
+    font-size: 1.5em;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: var(--heading-color, #0056b3);
+    border-bottom: 2px solid var(--border-color-light, #eee);
+    padding-bottom: 10px;
+}
+
+/* Styles for the Submission Details Grid */
+.detailsGrid {
+    display: grid;
+    grid-template-columns: auto 1fr; /* Label on left, value on right */
+    gap: 10px 20px; /* Row gap, column gap */
+    align-items: start; /* Align items to the top */
+}
+
+.detailLabel {
+    font-weight: bold;
+    color: var(--text-color-primary, #333);
+    text-align: right; /* Align labels to the right */
+}
+
+.detailValue {
+    color: var(--text-color-secondary, #555);
+    word-break: break-word; /* Allow long text to wrap */
+}
+
+.processingErrorDetails {
+    font-size: 0.9em;
+    color: var(--danger-color, #dc3545);
+    margin-left: 10px;
+    font-weight: normal;
+}
+
+.actionLink { /* Style for links within details */
+    color: var(--link-color, #007bff);
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+
+.actionLink:hover {
+    text-decoration: underline;
+    color: darken(var(--link-color, #007bff), 10%);
+}
+
+
+/* Styles for the Parsed Results Table */
+.resultsTableWrapper { /* Wrapper for scrolling */
+    max-height: 400px; /* Set max height for table body */
+    overflow-y: auto; /* Enable vertical scrolling */
+    /* Optional: Add padding-right if scrollbar overlaps content */
+    padding-right: 10px;
+}
+
+.resultsTable {
+    width: 100%; /* Full width table */
+    border-collapse: collapse; /* Remove space between borders */
+    margin-top: 10px;
+}
+
+.resultsTable th, .resultsTable td {
+    border: 1px solid var(--border-color-light, #eee);
+    padding: 10px;
+    text-align: left; /* Align text to the left */
+}
+
+.resultsTable th {
+    background-color: var(--background-color-light, #f2f2f2);
+    font-weight: bold;
+    color: var(--text-color-primary, #333);
+    position: sticky; /* Make header sticky */
+    top: 0; /* Stick to the top of the wrapper */
+    z-index: 1; /* Ensure header is above scrolling content */
+}
+
+.resultsTable td {
+    color: var(--text-color-secondary, #555);
+    word-break: break-word;
+}
+
+/* Optional: Style for status column */
+.resultsTable td:nth-child(5) { /* Assuming status is the 5th column */
+    font-weight: bold;
+}
+
+/* Styles for Normal/Abnormal status text */
+.resultsTable td:nth-child(5):contains("Normal"),
+.resultsTable td:nth-child(5):contains("В норме"),
+.resultsTable td:nth-child(5):contains("Отрицательно"),
+.resultsTable td:nth-child(5):contains("Не обнаружено") {
+    color: var(--success-color, #28a745); /* Green */
+}
+
+.resultsTable td:nth-child(5):contains("Abnormal"),
+.resultsTable td:nth-child(5):contains("Ниже нормы"),
+.resultsTable td:nth-child(5):contains("Выше нормы"),
+.resultsTable td:nth-child(5):contains("Патология"),
+.resultsTable td:nth-child(5):contains("Отклонение"),
+.resultsTable td:nth-child(5):contains("Положительно"),
+.resultsTable td:nth-child(5):contains("Обнаружено") {
+    color: var(--danger-color, #dc3545); /* Red */
+}
+
+/* Style the scrollbar for the table wrapper */
+.resultsTableWrapper::-webkit-scrollbar {
+  width: 8px;
+}
+
+.resultsTableWrapper::-webkit-scrollbar-track {
+  background: var(--background-color-light, #f1f1f1);
+  border-radius: 10px;
+}
+
+.resultsTableWrapper::-webkit-scrollbar-thumb {
+  background: var(--border-color, #888);
+  border-radius: 10px;
+}
+
+.resultsTableWrapper::-webkit-scrollbar-thumb:hover {
+  background: var(--text-color-secondary, #555);
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .pageContainer {
+        padding: 15px;
+    }
+    .pageTitle {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+    }
+    .detailsSection, .resultsSection {
+        padding: 15px;
+        margin-top: 20px;
+    }
+    .sectionTitle {
+        font-size: 1.3em;
+        margin-bottom: 15px;
+    }
+    .detailsGrid {
+        grid-template-columns: 1fr; /* Stack label and value vertically */
+        gap: 5px 0;
+    }
+    .detailLabel {
+        text-align: left; /* Align labels to the left when stacked */
+        margin-bottom: 5px;
+    }
+    .processingErrorDetails {
+         margin-left: 0;
+         display: block; /* Show on new line */
+         margin-top: 5px;
+    }
+
+    /* Make table responsive by stacking cells or using horizontal scroll */
+    /* Option 1: Horizontal scroll (simpler) */
+    .resultsTableWrapper {
+        overflow-x: auto; /* Enable horizontal scroll */
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        padding-bottom: 10px; /* Add space for horizontal scrollbar */
+    }
+    .resultsTable {
+        width: 600px; /* Give it a minimum width to prevent squishing */
+        /* Or use min-width: max-content; if supported */
+    }
+
+    /* Option 2: Stack table cells (more complex, requires significant CSS/JS) */
+    /* Example (basic idea, needs refinement):
+    .resultsTable thead { display: none; } // Hide header
+    .resultsTable tr { display: block; border: 1px solid #ccc; margin-bottom: 10px; }
+    .resultsTable td { display: block; text-align: right !important; border: none; border-bottom: 1px dotted #eee; }
+    .resultsTable td::before { content: attr(data-label); float: left; font-weight: bold; text-transform: uppercase; } // Add label before content
+    */
+}
+

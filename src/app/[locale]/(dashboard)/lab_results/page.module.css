@@ -1,227 +1,575 @@
-.loadingPageContainer {
-    height: 100vh;
-    flex-grow: 1;
-    display: flex; /* Use flexbox to center the content */
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    /* Optional: Add a background color or overlay */
-    /* background-color: rgba(255, 255, 255, 0.8); */
-    /* position: fixed; */ /* Uncomment if you want it to cover the whole screen */
-    /* top: 0; left: 0; right: 0; bottom: 0; */
-    /* z-index: 1000; */ /* Ensure it's on top */
-}
+/* app/(dashboard)/lab_results/page.module.css */
 
-/* Styles for the spinner itself */
-.loadingSpinner {
-    border: 8px solid #f3f3f3; /* Light grey border */
-    border-top: 8px solid #3498db; /* Blue border on top (creates the spinner effect) */
-    border-radius: 50%; /* Make it round */
-    width: 60px; /* Size of the spinner */
-    height: 60px; /* Size of the spinner */
-    animation: spin 1s linear infinite; /* Apply the spin animation */
-    /* Optional: Add margin if you have text below it */
-    /* margin-bottom: 20px; */
-}
-
-/* Keyframes for the rotation animation */
-@keyframes spin {
-  0% { transform: rotate(0deg); } /* Start at 0 degrees */
-  100% { transform: rotate(360deg); } /* Rotate a full 360 degrees */
-}
-
+/* Basic container for the entire page */
 .pageContainer {
-    padding: 20px; /* Add some internal padding */
-    max-width: 1000px; /* Optional: limit max width for better readability */
-    margin: 0 auto; /* Center the content if max-width is set */
-    margin-bottom: 10vh;
+    padding: 20px;
+    max-width: 900px; /* Limit width for better readability */
+    margin: 0 auto; /* Center the container */
+    font-family: sans-serif; /* Use a common font */
+    color: var(--text-color-primary, #333); /* Default text color */
 }
 
+/* Page title styling */
 .pageTitle {
     font-size: 2em;
     margin-bottom: 30px;
-    color: #333;
+    color: var(--heading-color, #0056b3); /* Default heading color */
+    text-align: center;
 }
 
-.documentSection {
-    margin-bottom: 40px; /* Space between document type sections */
-}
-
-.sectionTitle {
-    font-size: 1.5em;
-    margin-bottom: 15px;
-    color: #555;
-    border-bottom: 1px solid #eee; /* Separator line */
-    padding-bottom: 5px;
-}
-
-.documentList {
-    list-style: none; /* Remove default list bullets */
-    padding: 0;
-    margin: 0;
-}
-
-.documentItem {
-    background-color: #f9f9f9;
-    border: 1px solid #eee;
-    border-radius: 5px;
-    padding: 10px 15px;
-    margin-bottom: 10px;
+/* Styles for the main loading state when page content is fetching */
+.loadingPageContainer {
     display: flex;
-    justify-content: space-between; /* Space out document name and action */
+    flex-direction: column; /* Align items vertically */
     align-items: center;
-    transition: background-color 0.2s ease;
+    justify-content: center;
+    min-height: 300px; /* Give it some height */
+    color: var(--text-color-secondary, #666); /* Or appropriate color */
+    font-size: 1.2em;
 }
 
-.documentItem:hover {
-    background-color: #f0f0f0;
+/* Spinner animation */
+.loadingSpinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid var(--primary-color, #007bff); /* Or your theme's loading color */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px; /* Space between spinner and text */
 }
 
-.documentName {
-    font-weight: bold;
-    color: #333;
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
-.documentActions a {
-    color: #007bff; /* Example link color */
-    text-decoration: none;
-    margin-left: 15px;
-    transition: color 0.2s ease;
+/* Small spinner for buttons and status indicators */
+.smallSpinner {
+    border: 2px solid rgba(255, 255, 255, 0.5); /* White spinner on colored buttons */
+    border-top: 2px solid rgba(255, 255, 255, 1);
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    margin-left: 5px; /* Space after text */
+    vertical-align: middle;
 }
 
-.documentActions a:hover {
-    color: #0056b3;
-    text-decoration: underline;
+/* Adjust small spinner color for status text */
+.uploadStatusText .smallSpinner {
+     border-color: rgba(0, 0, 0, 0.1); /* Darker spinner on light background */
+     border-top-color: var(--text-color-secondary, #666); /* Match text color */
 }
 
 
+/* Styles for loading/error when fetching submission list */
+.loadingSubmissionsContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: var(--text-color-secondary, #666);
+    font-size: 1.1em;
+    /* Add margin/padding as needed */
+    margin-top: 20px;
+    border: 1px dashed var(--border-color-light, #ccc);
+    border-radius: 8px;
+}
+
+/* General error message style */
+.errorMessage {
+    color: var(--danger-color, #dc3545); /* Red color for errors */
+    margin-top: 15px;
+    padding: 10px;
+    background-color: var(--danger-bg, rgba(220, 53, 69, 0.1)); /* Light red background */
+    border: 1px solid var(--danger-color, #dc3545);
+    border-radius: 4px;
+    text-align: center;
+}
+
+
+/* Styles for the upload form area */
 .uploadSection {
-    margin-top: 50px; /* Space above the upload area */
-    border-top: 1px solid #eee;
-    padding-top: 30px;
+    margin-top: 40px;
+    padding: 20px;
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 8px;
+    background-color: var(--background-color-section, #f8f9fa); /* Light background for section */
 }
 
 .uploadTitle {
-     font-size: 1.5em;
-     margin-bottom: 15px;
-     color: #555;
+    font-size: 1.5em;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: var(--heading-color, #0056b3);
+    text-align: center;
 }
 
 .uploadForm {
-    /* Styles for your upload form or input area */
-    border: 2px dashed #ccc;
+    cursor: pointer; /* Indicate it's clickable */
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out; /* Smooth hover effect */
+    padding: 30px 20px; /* Add padding */
+    border: 2px dashed var(--border-color, #ddd); /* Add a dashed border */
     border-radius: 8px;
-    padding: 30px;
     text-align: center;
-    color: #777;
-    cursor: pointer; /* Indicate it's a drop zone or clickable area */
+    color: var(--text-color-secondary, #666);
+    font-size: 1.1em;
 }
 
-/* Styles for a hidden file input often used with a custom upload area */
+.uploadForm:hover:not(.uploadFormDisabled) {
+    background-color: var(--background-color-hover, #e9ecef); /* Or a slightly darker background */
+    border-color: var(--primary-color, #007bff); /* Change border color on hover */
+}
+
+.uploadFormDisabled {
+    cursor: not-allowed; /* Indicate it's disabled */
+    opacity: 0.7;
+    background-color: var(--background-color-disabled, #e9ecef); /* Or a greyed-out color */
+    border-color: var(--border-color-light, #ccc);
+}
+
 .hiddenFileInput {
-    display: none;
+    display: none; /* Hide the default file input */
 }
-/* app/(dashboard)/lab_results/page.module.css */
 
-/* Add these styles */
-/* app/(dashboard)/lab_results/page.module.css */
 
-/* Add these styles */
-
+/* Styles for the list of selected files before upload */
 .selectedFilesList {
     margin-top: 20px;
     padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #fff;
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 8px;
+    background-color: var(--background-color-light, #fff); /* Or a light background */
 }
 
 .selectedFilesList h4 {
+    font-size: 1.1em;
     margin-top: 0;
     margin-bottom: 10px;
-    font-size: 1.1em;
-    color: #333;
+    color: var(--text-color-primary, #333);
 }
 
 .selectedFilesList ul {
-    list-style: none; /* Remove default list bullets */
+    list-style: none;
     padding: 0;
     margin: 0;
 }
 
 .selectedFileItem {
-    display: flex; /* Use flexbox to align name and button */
-    justify-content: space-between; /* Push name and button to ends */
-    align-items: center; /* Vertically center */
-    background-color: #f9f9f9;
-    border: 1px solid #eee;
-    border-radius: 4px;
-    padding: 8px 12px;
-    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--border-color-light, #eee); /* Separator */
 }
-.selectedFileItem:hover{
-    background-color: #c78983;
-    cursor: pointer;
+
+.selectedFileItem:last-child {
+    border-bottom: none; /* No border for the last item */
 }
 
 .selectedFileName {
+    flex-grow: 1;
+    margin-right: 10px;
+    word-break: break-word; /* Prevent long names from overflowing */
     font-weight: normal;
-    color: #333;
-    margin-right: 10px; /* Space between name and button */
-    word-break: break-all; /* Break long file names */
 }
 
-.removeFileButton {
-    background-color: transparent; /* No background */
+.removeFileButton { /* Style for the 'x' button to remove selected files */
+    background: none;
     border: none;
-    color: #dc3545; /* Red color for delete */
-    font-size: 1.2em; /* Size of the 'x' */
+    color: var(--danger-color, #dc3545); /* Red color for remove */
     cursor: pointer;
-    padding: 0 5px; /* Add some clickable area */
-    transition: color 0.2s ease;
+    font-size: 1.4em; /* Larger size for the '×' */
+    padding: 0 5px;
+    transition: color 0.2s ease-in-out;
+    line-height: 1; /* Align vertically */
 }
 
-.removeFileButton:hover {
-    color: #c0392b; /* Darker red on hover */
-    cursor: pointer;
+.removeFileButton:hover:not(:disabled) {
+    color: darken(var(--danger-color, #dc3545), 10%); /* Darken on hover */
+}
+
+.removeFileButton:disabled {
+     cursor: not-allowed;
+     opacity: 0.5;
+}
+
+/* NEW: Style for the "Clear Selected" button */
+.clearSelectedButton {
+     margin-top: 15px;
+     padding: 8px 15px;
+     background-color: var(--secondary-color, #6c757d);
+     color: white;
+     border: none;
+     border-radius: 4px;
+     cursor: pointer;
+     font-size: 0.9em;
+     transition: background-color 0.2s ease-in-out;
+}
+
+.clearSelectedButton:hover:not(:disabled) {
+    background-color: darken(var(--secondary-color, #6c757d), 10%);
+}
+
+.clearSelectedButton:disabled {
+    background-color: var(--background-color-disabled, #cccccc);
+    cursor: not-allowed;
+    opacity: 0.6;
 }
 
 
+/* Styles for the confirm upload button */
 .confirmUploadButton {
-    display: block; /* Make it a block element */
-    margin-top: 20px; /* Space above the button */
-    padding: 10px 20px;
-    background-color: #007bff; /* Example blue color */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.3s ease;
+     display: inline-block; /* Or block */
+     margin-top: 20px;
+     padding: 12px 25px; /* Larger padding */
+     background-color: var(--primary-color, #007bff); /* Or your theme's primary color */
+     color: white;
+     border: none;
+     border-radius: 5px; /* Slightly more rounded */
+     cursor: pointer;
+     font-size: 1em;
+     font-weight: bold;
+     transition: background-color 0.2s ease-in-out;
+     text-transform: uppercase;
 }
 
 .confirmUploadButton:hover:not(:disabled) {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: darken(var(--primary-color, #007bff), 10%); /* Darken on hover */
 }
 
 .confirmUploadButton:disabled {
-    background-color: #ccc;
+    background-color: var(--background-color-disabled, #cccccc); /* Greyed out */
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Styles for general batch upload status messages */
+.uploadStatusMessage { /* Success message */
+    margin-top: 15px;
+    color: var(--success-color, #28a745); /* Green color for success */
+    text-align: center;
+    font-weight: bold;
+}
+
+.uploadErrorMessage { /* Error message */
+    color: var(--danger-color, #dc3545);
+    margin-top: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+
+/* --- Styles for the Upload Status Section (per file) --- */
+.uploadStatusSection {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid var(--border-color-light, #eee);
+    border-radius: 8px;
+    background-color: var(--background-color-light, #fff);
+}
+
+.uploadStatusTitle {
+    font-size: 1.1em;
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: var(--text-color-primary, #333);
+    border-bottom: 1px dashed var(--border-color-light, #eee);
+    padding-bottom: 5px;
+}
+
+.uploadStatusList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.uploadStatusItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--border-color-light, #eee);
+}
+
+.uploadStatusItem:last-child {
+    border-bottom: none;
+}
+
+.uploadStatusFileName {
+    flex-grow: 1;
+    margin-right: 10px;
+    word-break: break-word;
+    font-weight: normal;
+}
+
+.uploadStatusText {
+    font-size: 0.9em;
+    color: var(--text-color-secondary, #666);
+    white-space: nowrap;
+    display: flex; /* Use flex to align status text and spinner */
+    align-items: center;
+}
+
+.uploadStatusError {
+    color: var(--danger-color, #dc3545);
+    font-weight: normal;
+    margin-left: 5px; /* Space between status text and error details */
+}
+
+/* NEW: Style for the 'x' button to remove items from status list */
+.removeStatusItemButton {
+     background: none;
+     border: none;
+     color: var(--text-color-secondary, #666); /* Greyish color */
+     cursor: pointer;
+     font-size: 1.2em; /* Smaller than removeFileButton */
+     padding: 0 5px;
+     margin-left: 10px; /* Space from status text */
+     transition: color 0.2s ease-in-out;
+     line-height: 1;
+}
+
+.removeStatusItemButton:hover {
+     color: var(--danger-color, #dc3545); /* Red on hover */
+}
+
+/* NEW: Style for the "Clear Completed/Failed" button */
+.clearStatusListButton {
+     margin-top: 15px;
+     padding: 8px 15px;
+     background-color: var(--secondary-color, #6c757d);
+     color: white;
+     border: none;
+     border-radius: 4px;
+     cursor: pointer;
+     font-size: 0.9em;
+     transition: background-color 0.2s ease-in-out;
+}
+
+.clearStatusListButton:hover:not(:disabled) {
+    background-color: darken(var(--secondary-color, #6c757d), 10%);
+}
+
+.clearStatusListButton:disabled {
+    background-color: var(--background-color-disabled, #cccccc);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+
+/* --- END NEW Styles for the Upload Status Section --- */
+
+
+/* Styles for the sections displaying uploaded documents */
+.documentSection {
+    margin-top: 30px; /* Space above the section */
+    margin-bottom: 30px; /* Space below the section */
+    padding: 20px; /* Add some padding */
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 8px;
+    background-color: var(--background-color-section, #f8f9fa); /* Or a light background */
+}
+
+/* Wrapper for Section Title and Refresh button */
+.listHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px; /* Space above the header */
+    margin-bottom: 15px; /* Space below the header */
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border-color-light, #eee);
+}
+
+.sectionTitle {
+    font-size: 1.5em;
+    margin: 0; /* Remove default margin */
+    color: var(--heading-color, #0056b3);
+}
+
+.refreshButton {
+    padding: 8px 15px;
+    background-color: var(--secondary-color, #6c757d); /* Greyish button */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.2s ease-in-out;
+    display: flex; /* Align spinner and text */
+    align-items: center;
+}
+
+.refreshButton:hover:not(:disabled) {
+    background-color: darken(var(--secondary-color, #6c757d), 10%);
+}
+
+.refreshButton:disabled {
+    background-color: var(--background-color-disabled, #cccccc);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+
+/* Style for the wrapper around the list to enable scrolling */
+.documentListWrapper {
+    max-height: 300px; /* Set a maximum height */
+    overflow-y: auto; /* Enable vertical scrolling when content exceeds max-height */
+    padding-right: 10px; /* Add some padding to the right to make space for the scrollbar */
+}
+
+/* Style the scrollbar (optional, customize as needed) */
+.documentListWrapper::-webkit-scrollbar {
+  width: 8px;
+}
+
+.documentListWrapper::-webkit-scrollbar-track {
+  background: var(--background-color-light, #f1f1f1);
+  border-radius: 10px;
+}
+
+.documentListWrapper::-webkit-scrollbar-thumb {
+  background: var(--border-color, #888);
+  border-radius: 10px;
+}
+
+.documentListWrapper::-webkit-scrollbar-thumb:hover {
+  background: var(--text-color-secondary, #555);
+}
+
+
+.documentList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.documentItem {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0; /* More vertical padding */
+    border-bottom: 1px solid var(--border-color-light, #eee); /* Separator */
+}
+
+.documentItem:last-child {
+    border-bottom: none;
+}
+
+.documentName {
+    flex-grow: 1;
+    margin-right: 15px;
+    font-weight: bold;
+    color: var(--text-color-primary, #333);
+    word-break: break-word; /* Prevent long names from overflowing */
+    min-width: 180px; /* Ensure name takes some space before wrapping */
+}
+
+.documentMeta {
+    font-size: 0.9em;
+    color: var(--text-color-secondary, #666);
+    margin-right: 15px;
+    text-align: right; /* Align date/status to the right */
+    white-space: nowrap; /* Keep status/date on one line if possible */
+    min-width: 120px; /* Ensure meta takes some space */
+}
+
+.documentMeta span {
+     margin-left: 10px; /* Space between date and status */
+}
+
+.documentActions {
+     /* Style for links/buttons like 'View' */
+     white-space: nowrap; /* Prevent buttons/links from wrapping */
+     margin-top: 5px; /* Add a little space if wrapping */
+     display: flex; /* Use flex to align action links */
+     gap: 15px; /* Space between action links */
+}
+
+/* Style for individual action links */
+.actionLink {
+    color: var(--link-color, #007bff); /* Blue or other link color */
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+
+.actionLink:hover:not(.disabledLink) {
+    text-decoration: underline;
+    color: darken(var(--link-color, #007bff), 10%);
+}
+
+/* Style for disabled link (e.g., when processing is not completed) */
+.disabledLink {
+    color: var(--text-color-disabled, #999) !important; /* Greyed out */
+    pointer-events: none; /* Disable clicks */
+    text-decoration: none !important;
     cursor: not-allowed;
 }
 
-.uploadStatusMessage {
-    margin-top: 15px;
-    color: #007bff; /* Blue for status */
-    font-style: italic;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .pageContainer {
+        padding: 15px;
+    }
+    .pageTitle {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+    }
+    .uploadSection, .documentSection {
+        padding: 15px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .uploadTitle, .sectionTitle {
+        font-size: 1.3em;
+        margin-bottom: 15px;
+    }
+    .uploadForm {
+        padding: 20px 15px;
+        font-size: 1em;
+    }
+    .documentItem {
+        flex-direction: column; /* Stack items vertically on small screens */
+        align-items: flex-start; /* Align stacked items to the start */
+        padding: 10px 0;
+    }
+    .documentName, .documentMeta, .documentActions {
+        margin-right: 0; /* Remove right margin when stacked */
+        width: 100%; /* Take full width */
+        margin-bottom: 8px; /* Add space between stacked items */
+        text-align: left; /* Align text to the left when stacked */
+    }
+    .documentMeta {
+         display: flex; /* Use flex for date and status */
+         justify-content: flex-start;
+         align-items: center;
+         white-space: normal; /* Allow wrapping if needed */
+    }
+    .documentMeta span {
+        margin-left: 0;
+        margin-right: 10px; /* Add space between meta items */
+    }
+     .documentActions {
+         margin-top: 0; /* Adjust margin */
+         gap: 10px; /* Adjust space between links */
+     }
+     .actionLink {
+         margin-left: 0; /* Remove left margin */
+         margin-right: 0; /* Remove right margin */
+     }
+     .listHeader {
+         flex-direction: column;
+         align-items: flex-start;
+     }
+     .sectionTitle {
+        margin-bottom: 10px;
+     }
+     .refreshButton {
+         margin-top: 5px;
+     }
 }
 
-.uploadErrorMessage {
-    margin-top: 15px;
-    color: #dc3545; /* Red for error */
-    font-weight: bold;
-}
-
-.uploadSuccessMessage {
-    margin-top: 15px;
-    color: #28a745; /* Green for success */
-    font-weight: bold;
-}
