@@ -1,209 +1,191 @@
-/* app/[locale]/dev/page.module.css */
-
-/* Container for the entire page - Adjusted for consistency */
-.container {
-    padding: 20px; /* Consistent padding */
-    max-width: 960px; /* A common max-width for content */
-    margin: 0 auto;
-    font-family: 'Inter', sans-serif; /* Assuming 'Inter' font is used across pages */
-    text-align: center; /* Center content */
-    background-color: #ffffff; /* White background */
-    border-radius: 8px; /* Rounded corners for the main container */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+/* --- General Page Font & Base --- */
+/* --- Main Page Container (Card-like) --- */
+.pageWrapper { /* Outermost wrapper for centering the card */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align card to top */
+    min-height: 100vh;
+    padding: 2rem; /* Space around the card */
 }
 
-/* Page title style - Consistent */
+.pageContainer {
+    width: 90vw;
+    margin-left: 5vw;
+    margin-right: 5vw;
+    height: 100vh;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08); /* Slightly more pronounced shadow */
+    text-align: center; /* Center content within the card */
+}
+
+/* --- Header Controls (Language Switcher, Logout) --- */
+.controlsHeader {
+    display: flex;
+    justify-content: flex-end; /* Align to the right */
+    align-items: center;
+    margin-bottom: 1.5rem; /* Space below controls */
+    gap: 0.75rem; /* Space between items */
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 1rem;
+}
+
+/* --- Page Title --- */
 .pageTitle {
-    color: #1a202c; /* Darker color for headings */
-    margin-bottom: 30px;
-    text-align: center;
-    font-size: 2em; /* Larger font size for page title */
-    font-weight: 700; /* Bold font weight */
+    font-size: 1.8rem; /* Adjusted for a simpler page */
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 2rem;
 }
 
-/* Styling for individual sections on the page - Consistent */
-.section {
-    margin-bottom: 30px;
-    padding: 20px;
-    border: 1px solid #e2e8f0; /* Lighter border color */
-    border-radius: 8px; /* Rounded corners */
-    background-color: #f7fafc; /* Very light grey background */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* Subtle shadow for sections */
+/* --- Login Prompt & Download Action Section --- */
+.loginSection,
+.downloadActionSection {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background-color: #f7fafc; /* Light background for these sections */
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
 }
 
-/* Title for each section - Consistent */
-.sectionTitle {
-    color: #2d3748; /* Slightly darker color for section titles */
-    margin-top: 0;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #e2e8f0; /* Lighter bottom border */
-    padding-bottom: 10px;
-    font-size: 1.5em; /* Appropriate font size */
-    font-weight: 600; /* Semi-bold */
+.loginSection p {
+    font-size: 1rem;
+    color: #4a5568;
+    margin-bottom: 1.5rem;
 }
 
-/* Styles for the API Access Section */
-.apiKeySection {
-    display: flex;
-    flex-direction: column;
-    gap: 15px; /* Space between elements */
-    align-items: flex-start; /* Align items to the start */
-}
-
-.apiKeySection p {
-    margin: 0; /* Remove default paragraph margin */
-    color: #4a5568; /* Medium grey text color */
-}
-
-/* Style for the strong tag displaying the API key */
-.apiKeySection strong {
-    word-break: break-all; /* Break long API keys to prevent overflow */
-    font-weight: 700; /* Bold */
-    color: #2d3748; /* Darker color for the key */
-}
-
-/* Styles for the Regenerate Key button - Consistent button style */
-.apiKeySection button {
-    padding: 10px 20px;
-    background-color: #4299e1; /* Blue color */
-    color: white;
+/* --- General Button Styling --- */
+.button {
+    padding: 0.75rem 1.5rem; /* Default padding */
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 6px;
     border: none;
-    border-radius: 4px;
     cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.3s ease; /* Smooth transition on hover */
-    font-weight: 600; /* Semi-bold */
+    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none; /* Remove underline from button if it's an anchor */
 }
 
-.apiKeySection button:hover:not(:disabled) {
-    background-color: #3182ce; /* Darker blue on hover */
+.button:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle hover shadow */
 }
 
-.apiKeySection button:disabled {
-    background-color: #cbd5e0; /* Lighter grey when disabled */
+.button:disabled {
+    background-color: #e2e8f0 !important; /* Light grey, important to override */
+    color: #a0aec0 !important; /* Muted text color */
     cursor: not-allowed;
+    box-shadow: none;
 }
 
-/* Style for the API key save reminder text - Consistent */
-.apiKeyReminder {
-    font-size: 0.9em; /* Slightly smaller font size */
-    color: #718096; /* Darker grey color */
-    margin-top: 5px;
-}
-
-
-/* Styles for the Data Download Form Section */
-.dataDownloadForm {
-    display: flex;
-    flex-direction: column;
-    gap: 15px; /* Space between form groups and button */
-}
-
-/* Styling for each form group (label + input) - Consistent */
-.formGroup {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-}
-
-.formGroup label {
-    font-weight: 600; /* Semi-bold */
-    margin-bottom: 5px;
-    color: #4a5568; /* Medium grey color */
-}
-
-/* Styling for date input fields - Consistent */
-.formGroup input[type="date"] {
-    padding: 10px;
-    border: 1px solid #e2e8f0; /* Light grey border */
-    border-radius: 4px;
-    font-size: 1em;
-    color: #4a5568; /* Text color */
-    background-color: #ffffff; /* White background */
-}
-
-/* Styles for the Download Data button - Consistent button style */
-.dataDownloadForm button {
-    padding: 10px 20px;
-    background-color: #48bb78; /* Green color for download */
+/* Specific Button Styles */
+.loginButton { /* For the simulated login button */
+    background-color: #3182ce; /* Blue, similar to actionLink */
     color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.3s ease; /* Smooth transition on hover */
-    font-weight: 600; /* Semi-bold */
+}
+.loginButton:hover {
+    background-color: #2b6cb0;
 }
 
-.dataDownloadForm button:hover:not(:disabled) {
-    background-color: #38a169; /* Darker green on hover */
+.mainDownloadButton {
+    background-color: #38a169; /* Green for primary download action */
+    color: white;
+    font-size: 1.1rem; /* Slightly larger for emphasis */
+    padding: 0.85rem 1.75rem;
+}
+.mainDownloadButton:hover {
+    background-color: #2f855a;
 }
 
-.dataDownloadForm button:disabled {
-    background-color: #cbd5e0; /* Lighter grey when disabled */
-    cursor: not-allowed;
+.logoutButton {
+    background-color: #e2e8f0; /* Grey, less prominent */
+    color: #4a5568;
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+}
+.logoutButton:hover {
+    background-color: #cbd5e0;
 }
 
-/* Styles for error messages - Consistent */
-.errorMessage {
-    color: #e53e3e; /* Red color */
-    margin-top: 10px;
-    text-align: center;
-    font-weight: 600; /* Semi-bold */
+/* --- Feedback/Status Message --- */
+.feedbackMessage {
+    margin-top: 1.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    min-height: 1.5em; /* Prevent layout shift */
+    border: 1px solid transparent;
+}
+/* Conditional styling for feedback message can be applied in component based on error/success */
+.feedbackMessage.error { /* Example for error messages */
+    background-color: #fed7d7; /* Light red background from user's CSS */
+    color: #c53030; /* Red text from user's CSS */
+    border-color: #fbb6ce; /* Red border from user's CSS */
+}
+.feedbackMessage.success { /* Example for success messages */
+    background-color: #c6f6d5; /* Light green */
+    color: #2f855a; /* Dark green */
+    border-color: #9ae6b4;
+}
+.feedbackMessage.info { /* For 'downloading...' or general info */
+    background-color: #ebf8ff; /* Light blue from user's CSS */
+    color: #3182ce; /* Blue text from user's CSS */
+    border-color: #bee3f8; /* Blue border from user's CSS */
 }
 
-/* Styles for success messages - Consistent */
-.successMessage {
-    color: #38a169; /* Green color */
-    margin-top: 15px;
-    padding: 10px;
-    border: 1px solid #48bb78; /* Green border */
-    border-radius: 4px;
-    background-color: #f0fff4; /* Very light green background */
-    text-align: center;
-}
 
-.successMessage p {
-    margin: 5px 0; /* Add some vertical space between paragraphs in success message */
-}
-
-
-/* Loading Spinner Container Styles - Consistent */
-.loadingContainer {
+/* --- Loading State --- */
+.loadingPageContainer { /* Replaces .pageContainer for loading state */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh; /* Full viewport height */
+    min-height: 100vh; /* Full viewport height */
+    text-align: center;
+    padding: 2rem;
+    background-color: #f0f2f5; /* Match body background */
+    font-family: 'Inter', sans-serif;
+    color: #4a5568;
 }
 
-/* Loading Spinner Animation - Consistent */
 .loadingSpinner {
-    border: 4px solid #e2e8f0; /* Light grey border */
-    border-top: 4px solid #4299e1; /* Blue border for animation */
-    border-radius: 50%; /* Make it round */
+    border: 4px solid #e2e8f0; /* Lighter grey for spinner track */
+    border-top: 4px solid #3182ce; /* Blue for spinner active part */
+    border-radius: 50%;
     width: 40px;
     height: 40px;
-    animation: spin 1s linear infinite; /* Spin animation */
-    margin-bottom: 10px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
 }
 
-/* Keyframe animation for the spinner - Consistent */
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
 
-/* Error Container Styles - Consistent */
-.errorContainer {
-     display: flex;
-     flex-direction: column;
-     align-items: center;
-     justify-content: center;
-     height: 100vh;
-}
-
-.errorContainer p {
-    color: #e53e3e; /* Red color */
-    font-weight: bold;
+/* --- Adaptivity (Simplified) --- */
+@media (max-width: 768px) {
+    .pageWrapper {
+        padding: 1rem; /* Less padding around card on mobile */
+    }
+    .pageContainer {
+        padding: 1.5rem; /* Less padding inside card on mobile */
+    }
+    .pageTitle {
+        font-size: 1.5rem;
+    }
+    .controlsHeader {
+        flex-direction: column; /* Stack controls on mobile */
+        align-items: flex-end;
+        gap: 0.5rem;
+    }
+    .button,
+    .mainDownloadButton,
+    .loginButton {
+        width: 100%; /* Full width buttons on mobile for easier tapping */
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
 }

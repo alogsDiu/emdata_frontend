@@ -1,0 +1,8 @@
+{
+    "pageTitle": "Secure Data Export",
+    "downloadButtonText": "Download Full Data Archive (CSV)",
+    "downloadingMessage": "Preparing your download...",
+    "downloadErrorOccurred": "Download failed. Please try again later.",
+    "tokenUnavailableError": "Authentication token not found. Please ensure you are logged in correctly and try again.",
+    "loadingMessage": "Loading Page..."
+  }
