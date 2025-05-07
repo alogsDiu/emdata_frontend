@@ -488,6 +488,9 @@
      margin-top: 5px; /* Add a little space if wrapping */
      display: flex; /* Use flex to align action links */
      gap: 15px; /* Space between action links */
+     display: flex;
+     align-items: center;
+     justify-content: center;
 }
 
 /* Style for individual action links */
@@ -495,6 +498,79 @@
     color: var(--link-color, #007bff); /* Blue or other link color */
     text-decoration: none;
     transition: color 0.2s ease-in-out;
+}
+.downloadButton {
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    border-radius: 6px; /* Actual value for --border-radius-medium */
+    transition: background-color 0.2s ease-in-out, /* Actual value for --transition-speed */
+                color 0.2s ease-in-out,
+                border-color 0.2s ease-in-out,
+                box-shadow 0.2s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-width: 120px;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+
+    background-color: #007AFF;  /* Primary action color */
+    color: #FFFFFF;             /* Text on primary action */
+    border: 1px solid #007AFF;  /* Border matches background */
+}
+
+.downloadButton:hover:not(:disabled) {
+    background-color: #005ECB;  /* Darker primary for hover */
+    border-color: #005ECB;      /* Darker primary border for hover */
+    color: #FFFFFF;             /* Text remains white */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.downloadButton:disabled {
+    background-color: #E9ECEF;  /* Disabled background */
+    color: #ADB5BD;             /* Disabled text */
+    border-color: #CED4DA;      /* Disabled border */
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.deleteButton {
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    border-radius: 6px; /* Actual value for --border-radius-medium */
+    transition: background-color 0.2s ease-in-out, /* Actual value for --transition-speed */
+                color 0.2s ease-in-out,
+                border-color 0.2s ease-in-out,
+                box-shadow 0.2s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-width: 100px;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+
+    background-color: #DC3545;  /* Danger action color */
+    color: #FFFFFF;             /* Text on danger action */
+    border: 1px solid #DC3545;  /* Border matches background */
+}
+
+.deleteButton:hover:not(:disabled) {
+    background-color: #C82333;  /* Darker danger for hover */
+    border-color: #C82333;      /* Darker danger border for hover */
+    color: #FFFFFF;             /* Text remains white */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.deleteButton:disabled {
+    background-color: #E9ECEF;  /* Disabled background */
+    color: #ADB5BD;             /* Disabled text */
+    border-color: #CED4DA;      /* Disabled border */
+    cursor: not-allowed;
+    box-shadow: none;
 }
 
 .actionLink:hover:not(.disabledLink) {
