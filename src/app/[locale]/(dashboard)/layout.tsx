@@ -5,6 +5,7 @@ import { SidebarContent } from '@/types';
 import LanguageSwitcher from '@/components/general/LanguageSwitcher';
 import Image from 'next/image';
 import { DashboardProvider } from './DashboardContext';
+import { LogoutButton } from './components/LogoutButton';
 
 type locale = Promise<{ locale: string }>;
 
@@ -38,9 +39,7 @@ export default async function DashboardLayout({
               <Image src="/logo.svg" alt="Logo" width={30}  height={30} className={styles.logoIcon} />
             </div>
             <h2 className={styles.profileUsername}>Test</h2> {/* Added placeholder text */}
-            <button className={styles.logoutButton}>
-              {locale === "kz" ? "Logout" : (locale === "ru" ? "Выход" : "Шыгу")}
-            </button>
+            <LogoutButton locale={locale}/>
           </div>
         </header>
         <DashboardProvider locale={locale} >

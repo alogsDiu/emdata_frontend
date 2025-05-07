@@ -134,7 +134,21 @@
 .sidebarToggle:hover {
     color: white;
 }
-
+.logoutButton {
+    padding: 8px 15px; /* Add padding inside the button */
+    background-color: #e74c3c; /* Example: Red background for logout */
+    color: white; /* White text */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Slightly rounded corners */
+    cursor: pointer; /* Indicate it's clickable */
+    font-size: 0.9em; /* Slightly smaller font than username */
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+    flex-shrink: 0; /* Prevent shrinking */
+  }
+  
+  .logoutButton:hover {
+    background-color: #c0392b; /* Darker red on hover */
+  }
 /* No need for a separate .collapsed class on the button itself if using absolute positioning within the container */
 /* The container's collapsed class handles the button's final position indirectly */
 
