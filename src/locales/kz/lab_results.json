@@ -11,5 +11,11 @@
     "confirmUploadButtonText": "Жүктеуді растау",
     "uploadingMessage": "Файлдар жүктелуде...",
     "uploadErrorMessage": "Жүктеу қатесі:",
-    "uploadSuccessMessage": "Жүктеу сәтті аяқталды!"
+    "uploadSuccessMessage": "Жүктеу сәтті аяқталды!",
+    "unknownTestType":"Белгісіз түр",
+    "downloadFileAction": "Файлды жүктеу",
+    "downloadingMessage": "Жүктелуде...",
+    "viewDetailsAction": "Толық ақпарат",
+    "refreshListButton": "Тізімді жаңарту"
+    
 }

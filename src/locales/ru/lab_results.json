@@ -11,5 +11,10 @@
     "confirmUploadButtonText": "Подтвердить загрузку",
     "uploadingMessage": "Загрузка файлов...",
     "uploadErrorMessage": "Ошибка загрузки:",
-    "uploadSuccessMessage": "Загрузка успешно завершена!"
+    "uploadSuccessMessage": "Загрузка успешно завершена!",
+    "unknownTestType":"Неизвестный тип",
+    "downloadFileAction": "Скачать файл",
+    "downloadingMessage": "Загрузка...",
+    "viewDetailsAction": "Посмотреть детали",
+    "refreshListButton": "Обновить список"
 }

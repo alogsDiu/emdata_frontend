@@ -11,5 +11,10 @@
     "confirmUploadButtonText": "Confirm Upload",
     "uploadingMessage": "Uploading files...",
     "uploadErrorMessage": "Upload failed:",
-    "uploadSuccessMessage": "Upload successful!"
+    "uploadSuccessMessage": "Upload successful!",
+    "unknownTestType":"Unknown Type",
+    "downloadFileAction": "Download File",
+    "downloadingMessage": "Downloading...",
+    "viewDetailsAction": "View Details",
+    "refreshListButton": "Refresh List"
 }
