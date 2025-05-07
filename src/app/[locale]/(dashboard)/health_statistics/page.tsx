@@ -358,23 +358,28 @@ export default function HealthStatisticsPage() {
                     
                     {healthStats && healthStats.length > 0 && (
                         <div className={styles.metricSelectionControls}>
-                            <label>{pageContent.selectMetricsLabel}</label>
-                            <div className={styles.checkboxGroup}>
-                                {healthStats
-                                    .filter(metric => metric.list_of_all_the_values && metric.list_of_all_the_values.length > 0)
-                                    .map(metric => (
-                                    <label key={metric.name_of_component} className={styles.metricCheckboxLabel}>
-                                        <input
-                                            type="checkbox"
-                                            value={metric.name_of_component}
-                                            checked={selectedMetricsForChart.includes(metric.name_of_component)}
-                                            onChange={(e) => handleMetricSelection(metric.name_of_component, e.target.checked)}
-                                        />
-                                        {metric.name_of_component}
-                                    </label>
-                                ))}
-                            </div>
+                        {/* Add the class here */}
+                        <label className={styles.groupLabel}>{pageContent.selectMetricsLabel}</label>
+                        <div className={styles.checkboxGroup}>
+                            {healthStats
+                                .filter(metric => metric.list_of_all_the_values && metric.list_of_all_the_values.length > 0)
+                                .map(metric => (
+                                <label key={metric.name_of_component} className={styles.metricCheckboxLabel}>
+                                    <input
+                                        type="checkbox"
+                                        value={metric.name_of_component}
+                                        checked={selectedMetricsForChart.includes(metric.name_of_component)}
+                                        onChange={(e) => handleMetricSelection(metric.name_of_component, e.target.checked)}
+                                        // disabled={someCondition} // Add if needed
+                                    />
+                                    {/* Add this span for the custom checkbox style */}
+                                    <span className={styles.customCheckbox}></span>
+                                    {/* Wrap text in span (recommended) */}
+                                    <span className={styles.metricNameText}>{metric.name_of_component}</span>
+                                </label>
+                            ))}
                         </div>
+                    </div>
                     )}
 
                     {selectedMetricsForChart.length > 0 ? (

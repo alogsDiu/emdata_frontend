@@ -516,9 +516,9 @@
     cursor: pointer;
     text-decoration: none;
 
-    background-color: #007AFF;  /* Primary action color */
+    background-color:var(--secondary-color, #6c757d);  /* Primary action color */
     color: #FFFFFF;             /* Text on primary action */
-    border: 1px solid #007AFF;  /* Border matches background */
+    border: 1px solidvar(--secondary-color, #6c757d);  /* Border matches background */
 }
 
 .downloadButton:hover:not(:disabled) {
@@ -553,14 +553,14 @@
     cursor: pointer;
     text-decoration: none;
 
-    background-color: #DC3545;  /* Danger action color */
+    background-color: #e74c3c;  /* Danger action color */
     color: #FFFFFF;             /* Text on danger action */
-    border: 1px solid #DC3545;  /* Border matches background */
+    border: 1px solid #e74c3c;  /* Border matches background */
 }
 
 .deleteButton:hover:not(:disabled) {
-    background-color: #C82333;  /* Darker danger for hover */
-    border-color: #C82333;      /* Darker danger border for hover */
+    background-color: #c0392b;  /* Darker danger for hover */
+    border-color: #c0392b;      /* Darker danger border for hover */
     color: #FFFFFF;             /* Text remains white */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
