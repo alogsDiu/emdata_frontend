@@ -92,7 +92,15 @@ export default async function Home({
           </div>
         </div>
       </div>
-
+      <section className={styles.devLoginLinkSection}>
+        <div className={styles.devLoginLinkContent}>
+          <h2 className={styles.devLoginSectionTitle}>{content.developerPortalSectionTitle}</h2>
+          <p className={styles.devLoginSectionDescription}>{content.developerPortalDescription}</p>
+          <Link href={`/${locale}/logindev`} className={styles.devLoginLinkButton}>
+            {content.developerPortalLinkText}
+          </Link>
+        </div>
+      </section>
       <section className={styles.donateSection}>
         <h2 className={styles.donateTitle}>{content.donateHeading}</h2>
         <p className={styles.donateDescription}>{content.donateDescription}</p>

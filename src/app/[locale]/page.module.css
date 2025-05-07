@@ -376,3 +376,69 @@
 }
 
 /* === END: Donate Cat Section Styles === */
+
+/* === STYLES FOR DEVELOPER LOGIN LINK BLOCK === */
+.devLoginLinkSection {
+  padding: 3rem 2rem; /* Generous padding */
+  background-color: #f0f4f8; /* A slightly different background to stand out, or use #f7fafc like other sections */
+  text-align: center;
+  margin-top: 2rem; /* Space from the section above */
+  margin-bottom: 2rem; /* Space to the section below */
+  border-top: 1px solid #e2e8f0; /* Optional top border */
+  border-bottom: 1px solid #e2e8f0; /* Optional bottom border */
+}
+
+.devLoginLinkContent {
+  max-width: 700px; /* Limit width for readability */
+  margin: 0 auto; /* Center content */
+}
+
+.devLoginSectionTitle {
+  font-size: 1.75rem; /* Prominent title */
+  font-weight: 600;
+  color: #2d3748; /* Darker color, consistent with your .sectionTitle */
+  margin-bottom: 1rem;
+}
+
+.devLoginSectionDescription {
+  font-size: 1rem;
+  color: #4a5568; /* Consistent with your .detailLabel or paragraph text */
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.devLoginLinkButton {
+  display: inline-block;
+  padding: 0.85rem 2rem;
+  background-color: #3182ce; /* Blue, consistent with your .actionLink */
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  border-radius: 6px; /* Consistent with .backButton */
+  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.devLoginLinkButton:hover {
+  background-color: #2b6cb0; /* Darker blue on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Adaptivity for the dev login link block --- */
+@media (max-width: 768px) {
+  .devLoginLinkSection {
+    padding: 2rem 1rem;
+  }
+  .devLoginSectionTitle {
+    font-size: 1.5rem;
+  }
+  .devLoginSectionDescription {
+    font-size: 0.95rem;
+  }
+  .devLoginLinkButton {
+    width: 100%; /* Make button full width on mobile for easier tapping */
+    max-width: 320px; /* But not excessively wide */
+    padding: 0.75rem 1.5rem;
+  }
+}

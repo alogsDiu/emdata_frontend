@@ -10,6 +10,8 @@
     "p5":"Join us in revolutionizing healthcare—your data today could save lives tomorrow.",
     "donateHeading": "This Cat Team Can't Do It Alone",
   "donateDescription": "We're building the future of healthcare—one donation at a time. Help us power research and save lives. Even small amounts go a long way",
-  "donateImageAlt": "Cartoon cat holding a donate sign"
-    
+  "donateImageAlt": "Cartoon cat holding a donate sign",
+    "developerPortalSectionTitle": "For Developers",
+  "developerPortalLinkText": "Access Developer Portal",
+  "developerPortalDescription": "Log in to access API tools, data exports, and integration settings."
 }
