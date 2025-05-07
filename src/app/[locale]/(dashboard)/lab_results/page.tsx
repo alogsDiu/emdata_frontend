@@ -6,6 +6,7 @@ import styles from './page.module.css';
 import Link from 'next/link';
 import { useDashboardContext } from '../DashboardContext';
 import { getLocalizedContent } from '@/lib/i18n';
+import { useRouter } from 'next/navigation'; // Import useRouter
 
 // Define expected content structure for lab_results.json
 interface LabResultsPageContent {
@@ -51,6 +52,11 @@ interface LabResultsPageContent {
     internalError: string;
     downloadError: string; // NEW: Error message for download failure
     downloadingMessage: string; // NEW: Message while download is preparing
+    deleteAction: string; // NEW: Text for the delete button
+    deleteConfirmation: string; // NEW: Confirmation message for deletion
+    deleteSuccessMessage: string; // NEW: Message after successful deletion
+    deleteErrorMessage: string; // NEW: Message for deletion failure
+    deletingMessage: string; // NEW: Message while deleting
 }
 
 // Define the structure of a submission object from /api/submissions/
@@ -129,6 +135,11 @@ const getFallbackContent = (): LabResultsPageContent => ({
     internalError: 'An internal error occurred.',
     downloadError: 'Failed to download file.', // Fallback download error
     downloadingMessage: 'Preparing download...', // Fallback downloading message
+    deleteAction: 'Delete', // Fallback delete action text
+    deleteConfirmation: 'Are you sure you want to delete this submission?', // Fallback delete confirmation
+    deleteSuccessMessage: 'Submission deleted successfully.', // Fallback delete success
+    deleteErrorMessage: 'Failed to delete submission.', // Fallback delete error
+    deletingMessage: 'Deleting...', // Fallback deleting message
 });
 
 
@@ -146,6 +157,10 @@ export default function LabResultsPage() {
     const [batchUploadSuccess, setBatchUploadSuccess] = useState(false);
     const [downloadingFileId, setDownloadingFileId] = useState<string | null>(null); // Track which file is being downloaded
     const [downloadError, setDownloadError] = useState<string | null>(null); // Specific error for download
+    const [isDeletingSubmissionId, setIsDeletingSubmissionId] = useState<string | null>(null); // Track which submission is being deleted
+    const [deleteError, setDeleteError] = useState<string | null>(null); // Specific error for deletion
+    const [deleteSuccess, setDeleteSuccess] = useState(false);
+    const router = useRouter();
 
     // --- Effect Hook to Fetch Localized Page Content ---
     useEffect(() => {
@@ -311,7 +326,7 @@ export default function LabResultsPage() {
                 return; // Stop the download attempt
             }
 
-            const downloadUrl = `${CLEANED_API_BASE_URL}/submission/${submissionId}/download/`; // Correct backend URL
+            const downloadUrl = `${CLEANED_API_BASE_URL}/api/submission/${submissionId}/download/`; // Correct backend URL
             console.log(`Attempting download from: ${downloadUrl}`); // Log the URL
 
             const response = await fetch(downloadUrl, {
@@ -393,6 +408,81 @@ export default function LabResultsPage() {
         }
     };
 
+    // --- NEW: Handle File Deletion ---
+    const handleDeleteSubmission = async (submissionId: string) => {
+        if (!pageContent) return;
+
+        setIsDeletingSubmissionId(submissionId); // Set the ID of the submission being deleted
+        setDeleteError(null); // Clear any previous deletion errors
+        setDeleteSuccess(false);
+
+        const confirmation = confirm(pageContent.deleteConfirmation);
+        if (!confirmation) {
+            setIsDeletingSubmissionId(null); // Clear deleting status if user cancels
+            return;
+        }
+
+        try {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                setDeleteError(pageContent.authenticationRequired);
+                setTimeout(() => setDeleteError(null), 7000);
+                setIsDeletingSubmissionId(null);
+                return;
+            }
+
+            const deleteUrl = `${CLEANED_API_BASE_URL}/api/submission/${submissionId}/delete/`; // DRF endpoint for deletion
+
+            const response = await fetch(deleteUrl, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Token ${token}`,
+                },
+            });
+
+            if (response.ok) {
+                // Parse the JSON response to get the status
+                const responseData = await response.json();
+                if (responseData.status === 'success') {
+                    // Remove the deleted submission from the list
+                    setUploadedSubmissions(prev => prev.filter(sub => sub.id !== submissionId));
+                    setDeleteSuccess(true);
+                    setTimeout(() => setDeleteSuccess(false), 5000);
+                    // Remove corresponding file status
+                    setFileStatuses(prev => prev.filter(item => item.submissionId !== submissionId));
+                    console.log(`Submission ${submissionId} deleted successfully.`);
+                     // Refresh submissions list after deletion
+                     fetchSubmissions(false);
+                      router.push(`/${locale}/lab_results`);
+                }
+                else {
+                    setDeleteError(pageContent.deleteErrorMessage);
+                    setTimeout(() => setDeleteError(null), 7000);
+                    console.error(`Failed to delete submission ${submissionId}:  ${responseData.message}`);
+                }
+
+
+            } else {
+                let errorMsg = pageContent.deleteErrorMessage;
+                try {
+                    const errorData = await response.json();
+                    errorMsg += ` (Server error: ${errorData.detail || response.statusText})`;
+                } catch {
+                    errorMsg += ` (Server error: ${response.statusText})`;
+                }
+                console.error(`Failed to delete submission ${submissionId}: ${response.status} ${response.statusText}`);
+                setDeleteError(errorMsg);
+                setTimeout(() => setDeleteError(null), 7000);
+            }
+        } catch (error: any) {
+            console.error('Delete exception:', error);
+            setDeleteError(`${pageContent.deleteErrorMessage} (${pageContent.networkError}: ${error.message || 'Unknown error'})`);
+            setTimeout(() => setDeleteError(null), 7000);
+        } finally {
+            setIsDeletingSubmissionId(null); // Clear deleting status
+        }
+    };
+
 
     // --- Helper to Get Localized Status Text ---
     const getLocalizedStatus = useCallback((status: FileProcessingStatus | null | undefined): string => {
@@ -405,8 +495,8 @@ export default function LabResultsPage() {
             case 'UPLOAD_FAILED': return pageContent.fileStatusUploadFailed;
             case 'PENDING': return pageContent.processingStatusPending;
             case 'PROCESSING': return pageContent.processingStatusProcessing;
-            case 'COMPLETED': return pageContent.processingStatusCompleted;
-            case 'FAILED': return pageContent.processingStatusFailed;
+            case 'COMPLETED': return pageContent.fileStatusCompleted;
+            case 'FAILED': return pageContent.fileStatusFailed;
             default: return String(status);
         }
     }, [pageContent]);
@@ -452,6 +542,8 @@ export default function LabResultsPage() {
 
              {/* Display general download error */}
              {downloadError && <p className={styles.downloadErrorMessage}>{downloadError}</p>}
+              {deleteError && <p className={styles.deleteErrorMessage}>{deleteError}</p>}
+            {deleteSuccess && <p className={styles.deleteSuccessMessage}>{pageContent.deleteSuccessMessage}</p>}
 
 
             {/* --- Uploaded Documents Section --- */}
@@ -477,6 +569,7 @@ export default function LabResultsPage() {
                                 {groupedSubmissions[typeName].map(submission => {
                                      const statusUpper = submission.processing_status?.toUpperCase();
                                      const isDownloadingThis = downloadingFileId === submission.id;
+                                     const isDeletingThis = isDeletingSubmissionId === submission.id;
 
                                      return (
                                         <li key={submission.id} className={styles.documentItem}>
@@ -497,7 +590,7 @@ export default function LabResultsPage() {
                                                 <button
                                                     onClick={() => handleDownload(submission.id, submission.file_name)}
                                                     className={`${styles.actionLink} ${styles.downloadButton}`} // Style as link/button
-                                                    disabled={isDownloadingThis || isUploading} // Disable while downloading this or uploading anything
+                                                    disabled={isDownloadingThis || isUploading || isDeletingThis} // Disable while downloading this or uploading anything
                                                     title={pageContent.downloadFileAction} // Tooltip
                                                 >
                                                      {isDownloadingThis ? (
@@ -509,6 +602,22 @@ export default function LabResultsPage() {
                                                      ) : (
                                                         pageContent.downloadFileAction
                                                      )}
+                                                </button>
+                                                {/* Delete Button */}
+                                                <button
+                                                    onClick={() => handleDeleteSubmission(submission.id)}
+                                                    className={`${styles.actionLink} ${styles.deleteButton}`}
+                                                    disabled={isDownloadingThis || isUploading || isDeletingThis}
+                                                    title={pageContent.deleteAction}
+                                                >
+                                                    {isDeletingThis ? (
+                                                        <>
+                                                            <div className={styles.smallSpinnerInline}></div>
+                                                            {pageContent.deletingMessage}
+                                                        </>
+                                                    ) : (
+                                                        pageContent.deleteAction
+                                                    )}
                                                 </button>
                                             </div>
                                         </li>
@@ -601,3 +710,4 @@ export default function LabResultsPage() {
         </div>
     );
 }
+
