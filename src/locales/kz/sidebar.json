@@ -1,6 +1,7 @@
 {
   "labResults": "Зертханалық нәтижелер",
   "healthStatistics": "Денсаулық статистикасы",
-  "summary": "Қысқаша шолу",
-  "healthNeighbors": "Денсаулық бойынша көршілер"
+  "summary": "AI қорытындысы",
+  "healthNeighbors": "Денсаулық бойынша көршілер",
+  "allSummaries": "Барлық қорытындыларым"
 }

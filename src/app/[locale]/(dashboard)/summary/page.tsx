@@ -1,262 +1,292 @@
 // app/[locale]/(dashboard)/health_statistics/summary_page.tsx
-"use client"; // This page is a Client Component
+"use client"; 
 
 import { useState, useEffect } from 'react';
-import styles from './page.module.css'; // Import the CSS module
+import styles from './page.module.css'; // ИСПОЛЬЗУЕМ ОТДЕЛЬНЫЙ CSS МОДУЛЬ
 import { getLocalizedContent } from '@/lib/i18n';
+import { useDashboardContext } from '../DashboardContext'; // Для получения locale
 
-// Define the expected structure of the summary data
-interface HealthSummaryData {
-    overallSummary: string;
-    keyFindings: string[]; // Array of key findings sentences/points
-    detailedBreakdown: {
+// Определяем структуру данных, ожидаемую от /api/generate-health-summary/
+// Она должна совпадать с HealthSummarySerializer на бэкенде
+interface HealthSummaryResponseData {
+    id: string; // ID сохраненного резюме
+    created_at: string; // Дата создания
+    symptoms_prompt: string;
+    ai_summary: string;
+    ai_key_findings: string[]; 
+    ai_detailed_breakdown: {
         metricName: string;
         changePercentage: number;
         latestValue: number;
         unit: string;
-        llmComment: string; // Brief comment from the LLM about this metric
+        llmComment: string; 
     }[];
+    ai_suggested_diagnosis: string; // Предложенный диагноз
+    is_confirmed: boolean;
+    confirmed_diagnosis: string | null;
 }
 
-// Define expected content structure for summary.json (or default.json) - for localized text
+// Определяем структуру контента страницы из i18n
 interface SummaryPageContent {
     pageTitle: string;
+    symptomsInputLabel: string; // Метка для поля ввода симптомов
+    generateButtonText: string; // Текст кнопки генерации
+    generatingMessage: string; // Сообщение во время генерации
     overallSummaryTitle: string;
     keyFindingsTitle: string;
     detailedBreakdownTitle: string;
+    suggestedDiagnosisTitle: string; // Заголовок для предложенного диагноза
     loadingMessage: string;
     errorMessage: string;
     noDataMessage: string;
     disclaimer: string;
-    // Add other localized strings needed
+    authenticationRequired: string; // Добавлено
 }
 
-/**
- * Generates random mock data for the HealthSummaryData interface.
- * This function is used here to simulate receiving data from an API.
- * In a real application, this data would come from your backend.
- * @returns {HealthSummaryData} An object containing random health summary data.
- */
-function generateRandomHealthSummaryData(): HealthSummaryData {
-    const metrics = [
-        { name: "Hemoglobin", unit: "g/L" },
-        { name: "WBC", unit: "x10^9/L" },
-        { name: "Iron", unit: "µmol/L" },
-        { name: "Cholesterol", unit: "mmol/L" },
-        { name: "Glucose", unit: "mmol/L" },
-        { name: "Vitamin D", unit: "nmol/L" },
-    ];
-
-    const detailedBreakdown = metrics.map(metric => {
-        // Generate random change percentage between -20 and +20
-        const changePercentage = parseFloat((Math.random() * 40 - 20).toFixed(1));
-        // Generate random latest value (example ranges)
-        let latestValue = 0;
-        let llmComment = "";
-
-        switch (metric.name) {
-            case "Hemoglobin":
-                latestValue = parseFloat((Math.random() * (160 - 120) + 120).toFixed(1));
-                llmComment = changePercentage > 5 ? "Showing a positive trend." : changePercentage < -5 ? "Needs monitoring." : "Stable levels observed.";
-                break;
-            case "WBC":
-                latestValue = parseFloat((Math.random() * (10 - 4) + 4).toFixed(1));
-                 llmComment = changePercentage > 10 ? "Slight increase noted." : changePercentage < -10 ? "Slight decrease noted." : "Within typical range.";
-                break;
-            case "Iron":
-                latestValue = parseFloat((Math.random() * (30 - 10) + 10).toFixed(1));
-                 llmComment = changePercentage > 15 ? "Levels are improving." : changePercentage < -15 ? "Consider supplementation." : "Consistent levels.";
-                break;
-            case "Cholesterol":
-                latestValue = parseFloat((Math.random() * (6 - 3) + 3).toFixed(1));
-                 llmComment = changePercentage > 5 ? "Elevated slightly, monitor diet." : changePercentage < -5 ? "Showing improvement." : "Levels are stable.";
-                break;
-            case "Glucose":
-                latestValue = parseFloat((Math.random() * (7 - 4) + 4).toFixed(1));
-                 llmComment = changePercentage > 8 ? "Slightly high, consider dietary adjustments." : changePercentage < -8 ? "Lower than previous." : "Within normal limits.";
-                break;
-             case "Vitamin D":
-                latestValue = parseFloat((Math.random() * (80 - 30) + 30).toFixed(1));
-                llmComment = changePercentage > 10 ? "Levels are increasing." : changePercentage < -10 ? "Levels are decreasing, consider sun exposure or supplements." : "Stable levels observed.";
-                break;
-            default:
-                latestValue = parseFloat((Math.random() * 100).toFixed(1));
-                llmComment = "Trend observed.";
-        }
-
-
-        return {
-            metricName: metric.name,
-            changePercentage: changePercentage,
-            latestValue: latestValue,
-            unit: metric.unit,
-            llmComment: llmComment,
-        };
-    });
-
-    const overallSummary = "Overall, your recent health metrics show varied trends. Some key indicators remain stable, while others show slight fluctuations. Pay attention to the detailed breakdown for specific areas.";
-
-    const keyFindings = [
-        "Hemoglobin levels are currently stable.",
-        "Cholesterol shows a minor fluctuation.",
-        "Consider reviewing factors influencing Vitamin D levels if they are decreasing.",
-        "WBC count is within the typical range."
-    ];
-
-    return {
-        overallSummary: overallSummary,
-        keyFindings: keyFindings,
-        detailedBreakdown: detailedBreakdown,
-    };
-}
+// Базовый URL для API-запросов
+const API_BASE_URL = process.env.NEXT_PUBLIC_STARTING_BASE || '';
+const CLEANED_API_BASE_URL = API_BASE_URL.endsWith('/') ? API_BASE_URL.slice(0, -1) : API_BASE_URL;
 
 
 export default function HealthStatisticsSummaryPage() {
-    // State to hold the summary data - initialized directly with mock data
-    // Simulate a slight delay to better mimic fetching, if desired (optional)
-    const [summaryData, setSummaryData] = useState<HealthSummaryData | null>(null);
-    // State for loading status - starts true, set to false after simulated load
-    const [isLoading, setIsLoading] = useState(true);
-    // State for error messages - will remain null in this simulation
+    const { locale } = useDashboardContext(); 
+    
+    // Состояние для данных резюме (полученных с бэкенда)
+    const [summaryData, setSummaryData] = useState<HealthSummaryResponseData | null>(null);
+    // Состояние для симптомов, вводимых пользователем
+    const [userSymptoms, setUserSymptoms] = useState<string>("");
+    // Состояния загрузки и ошибок
+    const [isLoading, setIsLoading] = useState(false); // Теперь false по умолчанию
     const [error, setError] = useState<string | null>(null);
-    // State to hold localized content for this page
+    // Состояние для локализованного контента страницы
     const [pageContent, setPageContent] = useState<SummaryPageContent | null>(null);
     const [isContentLoading, setIsContentLoading] = useState(true);
     const [contentError, setContentError] = useState<string | null>(null);
 
-    // --- Effect to fetch page-specific localized content ---
+    // --- Эффект для загрузки локализованного контента страницы ---
     useEffect(() => {
         const fetchPageContent = async () => {
             setIsContentLoading(true);
             setContentError(null);
             try {
-                // Assuming getLocalizedContent is available and works for 'summary' key
-                // You'll need to adjust the path and key ('summary') as per your i18n setup
-                const content = await getLocalizedContent('en', 'summary') as SummaryPageContent; // Replace 'en' with dynamic locale if available
+                // Ключ 'summary' для файла локализации
+                const content = await getLocalizedContent(locale, 'summary') as SummaryPageContent; 
                  if (content) {
-                    setPageContent(content);
+                    setPageContent({ // Устанавливаем значения с запасными вариантами
+                        pageTitle: content.pageTitle || 'Резюме Здоровья (AI)',
+                        symptomsInputLabel: content.symptomsInputLabel || 'Опишите ваши симптомы:',
+                        generateButtonText: content.generateButtonText || 'Сгенерировать Резюме',
+                        generatingMessage: content.generatingMessage || 'Генерация резюме...',
+                        overallSummaryTitle: content.overallSummaryTitle || 'Общее Резюме',
+                        keyFindingsTitle: content.keyFindingsTitle || 'Ключевые Выводы',
+                        detailedBreakdownTitle: content.detailedBreakdownTitle || 'Детальный Разбор',
+                        suggestedDiagnosisTitle: content.suggestedDiagnosisTitle || 'Предполагаемый Диагноз (AI)',
+                        loadingMessage: content.loadingMessage || 'Загрузка...',
+                        errorMessage: content.errorMessage || 'Не удалось сгенерировать резюме.',
+                        noDataMessage: content.noDataMessage || 'Нет данных для отображения резюме.',
+                        disclaimer: content.disclaimer || 'Внимание: Это резюме сгенерировано AI и не является медицинским советом. Проконсультируйтесь с врачом.',
+                        authenticationRequired: content.authenticationRequired || 'Требуется аутентификация.',
+                    });
                  } else {
-                     // Fallback content if localization fails
-                     setPageContent({
-                         pageTitle: 'Health Summary',
-                         overallSummaryTitle: 'Overall Summary',
-                         keyFindingsTitle: 'Key Findings',
-                         detailedBreakdownTitle: 'Detailed Breakdown',
-                         loadingMessage: 'Loading summary...',
-                         errorMessage: 'Failed to load summary.',
-                         noDataMessage: 'No summary data available.',
-                         disclaimer: 'Disclaimer: This summary is generated by an AI model and should not be considered medical advice. Always consult with a healthcare professional for any health concerns.',
-                     });
+                    throw new Error("Не удалось загрузить локализованный контент для страницы резюме.");
                  }
             } catch (error: any) {
-                console.error("Error loading summary page content:", error);
-                setContentError("Failed to load summary page content.");
-                 // Set fallback content on error
-                  setPageContent({
-                      pageTitle: 'Health Summary',
-                      overallSummaryTitle: 'Overall Summary',
-                      keyFindingsTitle: 'Key Findings',
-                      detailedBreakdownTitle: 'Detailed Breakdown',
-                      loadingMessage: 'Loading summary...',
-                      errorMessage: 'Failed to load summary.',
-                      noDataMessage: 'No summary data available.',
-                      disclaimer: 'Disclaimer: This summary is generated by an AI model and should not be considered medical advice. Always consult with a healthcare professional for any health concerns.',
-                  });
+                console.error("Ошибка загрузки контента страницы резюме:", error);
+                setContentError("Не удалось загрузить контент страницы. Отображается текст по умолчанию.");
+                 setPageContent({ // Запасной контент
+                     pageTitle: 'Резюме Здоровья (AI)',
+                     symptomsInputLabel: 'Опишите ваши симптомы:',
+                     generateButtonText: 'Сгенерировать Резюме',
+                     generatingMessage: 'Генерация резюме...',
+                     overallSummaryTitle: 'Общее Резюме',
+                     keyFindingsTitle: 'Ключевые Выводы',
+                     detailedBreakdownTitle: 'Детальный Разбор',
+                     suggestedDiagnosisTitle: 'Предполагаемый Диагноз (AI)',
+                     loadingMessage: 'Загрузка...',
+                     errorMessage: 'Не удалось сгенерировать резюме.',
+                     noDataMessage: 'Нет данных для отображения резюме.',
+                     disclaimer: 'Внимание: Это резюме сгенерировано AI и не является медицинским советом. Проконсультируйтесь с врачом.',
+                     authenticationRequired: 'Требуется аутентификация.',
+                 });
             } finally {
                 setIsContentLoading(false);
             }
         };
-
         fetchPageContent();
-    }, []); // Empty dependency array means this runs once on mount
+    }, [locale]); // Перезагрузка при смене языка
 
-    // --- Effect to simulate receiving summary data ---
-    useEffect(() => {
-        // Simulate a network delay before setting the data
-        const simulateFetch = setTimeout(() => {
-            const mockData = generateRandomHealthSummaryData();
-            setSummaryData(mockData);
-            setIsLoading(false); // Set loading to false after data is "received"
-        }, 500); // Simulate a 500ms delay
+    // --- Функция для отправки запроса на генерацию резюме ---
+    const handleGenerateSummary = async () => {
+        if (!userSymptoms.trim() || !pageContent) {
+            setError(pageContent?.errorMessage || "Пожалуйста, введите симптомы."); // Используем локализованное сообщение, если возможно
+            return;
+        }
 
-        // Cleanup the timeout if the component unmounts
-        return () => clearTimeout(simulateFetch);
+        setIsLoading(true);
+        setError(null);
+        setSummaryData(null); // Очищаем предыдущее резюме
 
-    }, []); // Empty dependency array means this runs once on mount
+        try {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                setError(pageContent.authenticationRequired);
+                setIsLoading(false);
+                return;
+            }
+
+            const response = await fetch(`${CLEANED_API_BASE_URL}/api/generate-health-summary/`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Token ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ symptoms: userSymptoms }), // Отправляем симптомы
+            });
+
+            if (!response.ok) {
+                let errorDetail = pageContent.errorMessage; // Общее сообщение об ошибке
+                try {
+                    const errorData = await response.json();
+                    errorDetail = errorData.detail || errorData.symptoms || errorDetail; // Пытаемся получить детали ошибки
+                } catch (e) {
+                    // Не удалось разобрать JSON
+                }
+                throw new Error(errorDetail);
+            }
+
+            const data: HealthSummaryResponseData = await response.json();
+            setSummaryData(data); // Сохраняем полученное резюме
+
+        } catch (error: any) {
+            console.error("Ошибка генерации резюме:", error);
+            setError(error.message || pageContent.errorMessage);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
 
-    // Show loading state while content or summary data is fetching
-    if (isContentLoading || isLoading || !pageContent) {
+    // --- Логика Рендеринга ---
+
+    // Состояние загрузки контента страницы
+    if (isContentLoading || !pageContent) {
         return (
             <div className={styles.loadingContainer}>
                  <div className={styles.loadingSpinner}></div>
-                 {/* Use localized loading message */}
-                 <p>{pageContent?.loadingMessage || 'Loading...'}</p>
+                 <p>{pageContent?.loadingMessage || 'Загрузка...'}</p>
             </div>
         );
     }
 
-    // Show error state if fetching failed (will not happen with this simulation)
-    if (error) {
-        return <div className={styles.errorContainer}><p>{error}</p></div>;
+    // Ошибка загрузки контента страницы
+    if (contentError) {
+        return <div className={styles.errorContainer}><p>{contentError}</p></div>;
     }
 
-    // Show message if no summary data is available after loading (should not happen with mock data)
-    if (!summaryData) {
-        return (
-            <div className={styles.container}>
-                <h1 className={styles.pageTitle}>{pageContent.pageTitle}</h1>
-                {/* Use localized no data message */}
-                <p>{pageContent.noDataMessage}</p>
-            </div>
-        );
-    }
-
-
-    // Render the summary content
+    // Основной рендеринг
     return (
         <div className={styles.container}>
-            {/* Use localized page title */}
             <h1 className={styles.pageTitle}>{pageContent.pageTitle}</h1>
 
-            {/* Overall Summary Section */}
-            <section className={styles.section}>
-                 {/* Use localized section title */}
-                <h2 className={styles.sectionTitle}>{pageContent.overallSummaryTitle}</h2>
-                <p>{summaryData.overallSummary}</p>
-            </section>
+            {/* Поле ввода симптомов */}
+            <div className={styles.inputSection}>
+                <label htmlFor="symptomsInput" className={styles.inputLabel}>
+                    {pageContent.symptomsInputLabel}
+                </label>
+                <textarea
+                    id="symptomsInput"
+                    className={styles.symptomsTextarea}
+                    value={userSymptoms}
+                    onChange={(e) => setUserSymptoms(e.target.value)}
+                    rows={4}
+                    placeholder="Например: Головная боль, усталость, температура 37.5..."
+                    disabled={isLoading} // Блокируем во время загрузки
+                />
+                <button 
+                    className={styles.generateButton} 
+                    onClick={handleGenerateSummary}
+                    disabled={isLoading || !userSymptoms.trim()} // Блокируем, если пусто или идет загрузка
+                >
+                    {isLoading ? pageContent.generatingMessage : pageContent.generateButtonText}
+                </button>
+            </div>
 
-            {/* Key Findings Section */}
-            {summaryData.keyFindings && summaryData.keyFindings.length > 0 && (
-                <section className={styles.section}>
-                     {/* Use localized section title */}
-                    <h2 className={styles.sectionTitle}>{pageContent.keyFindingsTitle}</h2>
-                    <ul className={styles.list}>
-                        {summaryData.keyFindings.map((finding, index) => (
-                            <li key={index} className={styles.listItem}>{finding}</li>
-                        ))}
-                    </ul>
-                </section>
+            {/* Отображение ошибки */}
+            {error && <p className={styles.errorMessageApi}>{error}</p>}
+
+            {/* Отображение загрузки */}
+            {isLoading && !summaryData && ( // Показываем только если еще нет данных
+                 <div className={styles.loadingContainer} style={{marginTop: '20px'}}>
+                     <div className={styles.loadingSpinner}></div>
+                     <p>{pageContent.generatingMessage}</p>
+                 </div>
             )}
 
-            {/* Detailed Breakdown Section */}
-            {summaryData.detailedBreakdown && summaryData.detailedBreakdown.length > 0 && (
-                <section className={styles.section}>
-                     {/* Use localized section title */}
-                    <h2 className={styles.sectionTitle}>{pageContent.detailedBreakdownTitle}</h2>
-                    <ul className={styles.list}>
-                        {summaryData.detailedBreakdown.map((metric, index) => (
-                            <li key={index} className={styles.listItem}>
-                                <strong>{metric.metricName}:</strong> {metric.changePercentage.toFixed(1)}% (Latest: {metric.latestValue} {metric.unit}) - {metric.llmComment}
-                            </li>
-                        ))}
-                    </ul>
-                </section>
+
+            {/* Отображение сгенерированного резюме */}
+            {summaryData && (
+                <div className={styles.summaryResults}>
+                    {/* Общее Резюме */}
+                    <section className={styles.section}>
+                        <h2 className={styles.sectionTitle}>{pageContent.overallSummaryTitle}</h2>
+                        <p>{summaryData.ai_summary}</p>
+                    </section>
+
+                    {/* Ключевые Выводы */}
+                    {summaryData.ai_key_findings && summaryData.ai_key_findings.length > 0 && (
+                        <section className={styles.section}>
+                            <h2 className={styles.sectionTitle}>{pageContent.keyFindingsTitle}</h2>
+                            <ul className={styles.list}>
+                                {summaryData.ai_key_findings.map((finding, index) => (
+                                    <li key={index} className={styles.listItem}>{finding}</li>
+                                ))}
+                            </ul>
+                        </section>
+                    )}
+                    
+                    {/* Предполагаемый Диагноз */}
+                    {summaryData.ai_suggested_diagnosis && (
+                         <section className={styles.section}>
+                            <h2 className={styles.sectionTitle}>{pageContent.suggestedDiagnosisTitle}</h2>
+                            <p className={styles.diagnosisHighlight}>{summaryData.ai_suggested_diagnosis}</p>
+                            {/* Здесь в будущем можно добавить кнопку "Подтвердить" */}
+                         </section>
+                    )}
+
+                    {/* Детальный Разбор */}
+                    {summaryData.ai_detailed_breakdown && summaryData.ai_detailed_breakdown.length > 0 && (
+                        <section className={styles.section}>
+                            <h2 className={styles.sectionTitle}>{pageContent.detailedBreakdownTitle}</h2>
+                            <ul className={styles.list}>
+                                {summaryData.ai_detailed_breakdown.map((metric, index) => {
+                                    const changePercentageDisplay = typeof metric.changePercentage === 'number'
+                                        ? metric.changePercentage.toFixed(1)
+                                        : 'N/A';
+                                    const changePercentageColor = typeof metric.changePercentage === 'number' && metric.changePercentage >= 0
+                                        ? 'green'
+                                        : 'red';
+                                    return (
+                                        <li key={index} className={styles.listItem}>
+                                            <strong>{metric.metricName}:</strong> 
+                                            {' '}
+                                            <span style={{ color: changePercentageColor }}>
+                                                ({changePercentageDisplay}%)
+                                            </span>
+                                            {' '}
+                                            (Последнее: {metric.latestValue} {metric.unit})
+                                            <br /> {/* Перенос строки для комментария */}
+                                            <span className={styles.llmComment}><i>AI: {metric.llmComment}</i></span>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        </section>
+                    )}
+
+                    {/* Дисклеймер */}
+                    <p className={styles.disclaimer}>{pageContent.disclaimer}</p>
+                </div>
             )}
-
-            {/* Disclaimer */}
-            <p className={styles.disclaimer}>{pageContent.disclaimer}</p>
-
         </div>
     );
 }

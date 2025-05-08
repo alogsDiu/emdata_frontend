@@ -1,6 +1,7 @@
 {
   "labResults": "Результаты анализов",
   "healthStatistics": "Статистика здоровья",
-  "summary": "Сводка",
-  "healthNeighbors": "Соседи по здоровью"
+  "summary": "AI-сводка",
+  "healthNeighbors": "Соседи по здоровью",
+  "allSummaries": "Все мои сводки"
 }

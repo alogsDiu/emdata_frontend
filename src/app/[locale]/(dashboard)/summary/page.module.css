@@ -1,69 +1,184 @@
 /* app/[locale]/(dashboard)/health_statistics/summary_page.module.css */
 
 .container {
-    padding: 20px;
-    max-width: 800px; /* Limit width for better readability */
-    margin: 0 auto; /* Center the container */
-    font-family: sans-serif; /* Use a common sans-serif font */
+    padding: 24px; /* Increased padding */
+    max-width: 900px; /* Slightly wider */
+    margin: 20px auto; /* Add some top/bottom margin */
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; /* Modern font stack */
+    background-color: #ffffff; /* White background */
+    border-radius: 12px; /* Rounded corners for the container */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+    color: #333; /* Default text color */
 }
 
 .pageTitle {
-    color: #333;
-    margin-bottom: 20px;
+    color: #1a202c; /* Darker heading color */
+    font-size: 1.75rem; /* Larger title */
+    font-weight: 600; /* Semi-bold */
+    margin-bottom: 24px;
     text-align: center;
+}
+
+/* Input Section Styles */
+.inputSection {
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid #e2e8f0; /* Lighter border */
+    border-radius: 8px;
+    background-color: #f7fafc; /* Light background */
+}
+
+.inputLabel {
+    display: block; /* Ensure label takes full width */
+    font-weight: 500;
+    color: #4a5568; /* Gray text */
+    margin-bottom: 8px;
+}
+
+.symptomsTextarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e0; /* Slightly darker border */
+    border-radius: 6px;
+    font-size: 1rem;
+    line-height: 1.5;
+    min-height: 80px; /* Minimum height */
+    resize: vertical; /* Allow vertical resizing */
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.symptomsTextarea:focus {
+    outline: none;
+    border-color: #4299e1; /* Blue border on focus */
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5); /* Blue ring on focus */
+}
+
+.generateButton {
+    display: block; /* Full width */
+    width: 100%; /* Make button full width */
+    margin-top: 15px;
+    padding: 10px 15px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #4299e1; /* Blue background */
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.generateButton:hover:not(:disabled) {
+    background-color: #3182ce; /* Darker blue on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.generateButton:disabled {
+    background-color: #a0aec0; /* Gray when disabled */
+    cursor: not-allowed;
+    opacity: 0.7;
+    box-shadow: none;
+}
+
+/* Results Area */
+.summaryResults {
+    margin-top: 30px;
 }
 
 .section {
     margin-bottom: 30px;
-    padding: 15px;
-    border: 1px solid #eee;
+    padding: 20px; /* Increased padding */
+    border: 1px solid #e2e8f0; /* Lighter border */
     border-radius: 8px;
-    background-color: #f9f9f9;
+    background-color: #ffffff; /* White background for sections */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03); /* Subtle shadow for sections */
 }
 
 .sectionTitle {
-    color: #555;
+    color: #2d3748; /* Darker section title */
+    font-size: 1.25rem; /* Slightly larger section title */
+    font-weight: 600;
     margin-top: 0;
     margin-bottom: 15px;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 5px;
+    border-bottom: 1px solid #e2e8f0; /* Lighter border */
+    padding-bottom: 8px;
 }
 
 .list {
-    list-style: disc inside; /* Use bullet points */
-    padding-left: 0; /* Remove default padding */
+    list-style: none; /* Remove default bullet points */
+    padding-left: 0;
 }
 
 .listItem {
-    margin-bottom: 10px;
-    line-height: 1.5;
+    margin-bottom: 12px;
+    line-height: 1.6;
+    padding-left: 20px; /* Indent list items */
+    position: relative;
+}
+
+/* Custom bullet points (optional) */
+.listItem::before {
+    content: '•'; /* Bullet character */
+    color: #4299e1; /* Blue color for bullet */
+    font-weight: bold;
+    display: inline-block; 
+    width: 1em;
+    margin-left: -1.2em; /* Position before the text */
+    position: absolute;
+    left: 10px; /* Adjust position */
+}
+
+.diagnosisHighlight {
+    font-weight: 600;
+    color: #2d3748; /* Darker color for diagnosis */
+    background-color: #ebf8ff; /* Light blue background */
+    padding: 8px 12px;
+    border-radius: 6px;
+    border-left: 4px solid #4299e1; /* Blue left border */
+    margin-top: 5px;
+}
+
+.llmComment {
+    display: block; /* Ensure comment is on a new line */
+    font-size: 0.9em;
+    color: #718096; /* Gray color */
+    margin-top: 4px;
+    padding-left: 5px; /* Slight indent */
 }
 
 .disclaimer {
     margin-top: 40px;
-    font-size: 0.9em;
-    color: #777;
+    font-size: 0.85em; /* Smaller disclaimer */
+    color: #718096; /* Gray color */
     text-align: center;
     font-style: italic;
+    padding: 10px;
+    background-color: #f7fafc; /* Very light background */
+    border-radius: 6px;
 }
 
+/* Loading and Error Styles */
 .loadingContainer,
 .errorContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh; /* Full viewport height */
+    min-height: 200px; /* Minimum height */
+    padding: 20px;
+    text-align: center;
 }
 
 .loadingSpinner {
-    border: 4px solid #f3f3f3; /* Light grey */
-    border-top: 4px solid #3498db; /* Blue */
+    border: 5px solid #e2e8f0; /* Lighter grey */
+    border-top: 5px solid #4299e1; /* Blue */
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite; /* Spin animation */
-    margin-bottom: 10px;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
 }
 
 @keyframes spin {
@@ -71,7 +186,41 @@
     100% { transform: rotate(360deg); }
 }
 
-.errorContainer p {
-    color: red;
-    font-weight: bold;
+.loadingContainer p {
+    font-size: 1rem;
+    color: #4a5568;
 }
+
+.errorContainer p,
+.errorMessageApi { /* Style for API error messages */
+    color: #e53e3e; /* Red color */
+    font-weight: 500;
+    background-color: #fff5f5; /* Light red background */
+    border: 1px solid #fc8181; /* Red border */
+    border-radius: 6px;
+    padding: 10px 15px;
+    margin-top: 15px; /* Add margin for API errors */
+    text-align: center;
+}
+
+/* Responsive Adjustments (Optional Example) */
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+        margin: 10px;
+        border-radius: 8px;
+    }
+
+    .pageTitle {
+        font-size: 1.5rem;
+    }
+
+    .sectionTitle {
+        font-size: 1.15rem;
+    }
+
+    .symptomsTextarea {
+        min-height: 60px;
+    }
+}
+

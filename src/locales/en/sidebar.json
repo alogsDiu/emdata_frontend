@@ -1,6 +1,7 @@
 {
     "labResults": "Lab Results",
     "healthStatistics": "Health Statistics",
-    "summary": "Summary",
-    "healthNeighbors": "Health Neighbors"
+    "summary": "AI Summary",
+    "healthNeighbors": "Health Neighbors",
+    "allSummaries": "All My Summaries"
 }
