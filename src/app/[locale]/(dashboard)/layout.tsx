@@ -23,7 +23,8 @@ export default async function DashboardLayout({
         labResults: "Lab Results",
         healthStatistics: "Health Statistics",
         summary: "Summary",
-        healthNeighbors: "Health Neighbors"
+        healthNeighbors: "Health Neighbors",
+        allSummaries:"All summaries"
   }
   return (
     <div className={styles.DashboardWrapper}>
