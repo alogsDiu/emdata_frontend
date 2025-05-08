@@ -6,6 +6,7 @@ import LanguageSwitcher from '@/components/general/LanguageSwitcher';
 import Image from 'next/image';
 import { DashboardProvider } from './DashboardContext';
 import { LogoutButton } from './components/LogoutButton';
+import UserProfileHeader from './components/UserProfileHeader';
 
 type locale = Promise<{ locale: string }>;
 
@@ -24,7 +25,6 @@ export default async function DashboardLayout({
         summary: "Summary",
         healthNeighbors: "Health Neighbors"
   }
-
   return (
     <div className={styles.DashboardWrapper}>
       <Sidebar sidebar_content={sidebar_content} locale={locale}/> 
@@ -35,11 +35,7 @@ export default async function DashboardLayout({
             <LanguageSwitcher/>
           </div>
           <div className={styles.profileElementsController}>
-            <div className={styles.profilePicturePlaceholder}> {/* Added a specific class for the placeholder */}
-              <Image src="/logo.svg" alt="Logo" width={30}  height={30} className={styles.logoIcon} />
-            </div>
-            <h2 className={styles.profileUsername}>Test</h2> {/* Added placeholder text */}
-            <LogoutButton locale={locale}/>
+            <UserProfileHeader locale={locale} />
           </div>
         </header>
         <DashboardProvider locale={locale} >

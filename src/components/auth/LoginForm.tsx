@@ -98,7 +98,7 @@ export default function LoginForm({ content, locale }: LoginFormProps) {
 
             try {
                 localStorage.setItem(AUTH_TOKEN_KEY, token);
-
+                localStorage.setItem("loginIdentifier",loginIdentifier)
                 setLoginIdentifier("");
                 setPassword("");
                 const redirectPath = `/${locale}/health_statistics`;
