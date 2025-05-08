@@ -1,196 +1,352 @@
+// emdata_frontend/src/app/[locale]/developer/page.tsx
 "use client";
 
-import { useState, useEffect } from 'react';
-import styles from './page.module.css'; // Ensure this CSS module is styled accordingly
-import { getLocalizedContent } from '@/lib/i18n';
-import LanguageSwitcher from '@/components/general/LanguageSwitcher';
+import { use, useState, useEffect, FormEvent } from 'react'; // Добавлен 'use'
+import styles from './page.module.css';
+import { getLocalizedContent } from '@/lib/i18n'; 
+import LanguageSwitcher from '@/components/general/LanguageSwitcher'; 
 
-// Updated content structure for localization
-interface DownloadPageContent {
-    pageTitle: string;
-    downloadButtonText: string;
-    downloadingMessage: string;
-    downloadErrorOccurred: string; // For actual download errors
-    tokenUnavailableError: string; // Specifically if token can't be found client-side
-    loadingMessage: string;
-    // languageSwitcherLabel?: string; // If your LanguageSwitcher component needs it
+// --- Interfaces ---
+interface DeveloperPageParams { // Отдельный интерфейс для параметров страницы
+    locale: string;
 }
 
-// This function interacts with your backend to get the CSV file.
-async function triggerBackendCsvDownload(token: string, apiUrl: string): Promise<Response> {
-    // Token presence is now asserted before calling this function by UI logic
-    console.log(`Workspaceing CSV from: ${apiUrl} with token.`);
-    const response = await fetch(apiUrl, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        },
-    });
+interface DeveloperPageProps { // Пропсы для компонента страницы
+    params: Promise<DeveloperPageParams>; // params теперь Promise
+}
 
+interface DeveloperPageContent {
+    pageTitle: string;
+    loadingMessage: string;
+    tokenUnavailableError: string;
+    adminOnlyError: string;
+
+    testResultsExportTitle: string;
+    filtersTitle: string;
+    analyteNameLabel: string;
+    testDateAfterLabel: string;
+    testDateBeforeLabel: string;
+    clearFiltersButtonText: string;
+    downloadButtonText: string;
+    downloadingMessage: string;
+    downloadErrorOccurred: string;
+    feedbackSuccess: string;
+    feedbackError: string;
+    noFiltersAppliedTestResults: string;
+    fetchingFilterOptions: string; 
+    errorLoadingOptions: string; 
+
+    healthSummaryExportTitle: string;
+    summaryDateAfterLabel: string;
+    summaryDateBeforeLabel: string;
+    summaryIsConfirmedLabel: string;
+    confirmedOptionAny: string;
+    confirmedOptionYes: string;
+    confirmedOptionNo: string;
+    downloadHealthSummariesButtonText: string;
+    noFiltersAppliedHealthSummaries: string;
+}
+
+// --- Constants ---
+const API_BASE_URL = process.env.NEXT_PUBLIC_STARTING_BASE || '';
+const CLEANED_API_BASE_URL = API_BASE_URL.endsWith('/') ? API_BASE_URL.slice(0, -1) : API_BASE_URL;
+const TEST_RESULTS_CSV_API_URL = `${CLEANED_API_BASE_URL}/api/export/test-results/csv/`;
+const HEALTH_SUMMARIES_CSV_API_URL = `${CLEANED_API_BASE_URL}/api/export/health-summaries/csv/`;
+
+// --- Helper Functions ---
+async function triggerBackendCsvDownload(token: string, apiUrlWithParams: string): Promise<Response> {
+    console.log(`Requesting CSV from: ${apiUrlWithParams}`);
+    const response = await fetch(apiUrlWithParams, {
+        method: 'GET',
+        headers: { 'Authorization': `Token ${token}` },
+    });
     if (!response.ok) {
         let errorDetails = `Server error: ${response.status} ${response.statusText}`;
         try {
-            const errorData = await response.json(); // If backend sends JSON error
-            errorDetails = errorData.message || errorData.error || errorDetails;
+            const errorData = await response.json();
+            errorDetails = errorData.detail || errorData.message || errorData.error || errorDetails;
         } catch (e) {
-            // If error response is not JSON
             const textError = await response.text();
-            errorDetails = textError || errorDetails; // Use textError if available
+            errorDetails = textError || errorDetails;
         }
         throw new Error(`Failed to initiate download: ${errorDetails}`);
     }
     return response;
 }
 
-export default function DeveloperDownloadPage({ params }: { params: { locale: string } }) {
-    const { locale } = params;
+function getDefaultEnglishContent(): DeveloperPageContent {
+    return {
+        pageTitle: 'Developer Data Export', loadingMessage: 'Loading page...',
+        tokenUnavailableError: 'Authentication token not found. Please ensure you are logged in correctly.',
+        adminOnlyError: 'This page is for administrators only.',
+        
+        testResultsExportTitle: 'Export Test Results (CSV)',
+        filtersTitle: 'Filters',
+        analyteNameLabel: 'Analyte Name (contains):',
+        testDateAfterLabel: 'Test Date After (YYYY-MM-DD):',
+        testDateBeforeLabel: 'Test Date Before (YYYY-MM-DD):',
+        clearFiltersButtonText: 'Clear All Filters',
+        downloadButtonText: 'Download Test Results CSV',
+        downloadingMessage: 'Preparing your download...',
+        downloadErrorOccurred: 'Download failed. Please try again later.',
+        feedbackSuccess: 'Download started successfully! Check your downloads folder.',
+        feedbackError: 'An error occurred.',
+        noFiltersAppliedTestResults: 'No filters applied for Test Results. This will export all accessible test results.',
+        fetchingFilterOptions: 'Loading filter options...', 
+        errorLoadingOptions: 'Error loading filter options.', 
 
-    const [pageContent, setPageContent] = useState<DownloadPageContent | null>(null);
+        healthSummaryExportTitle: 'Export Health Summaries (CSV)',
+        summaryDateAfterLabel: 'Summary Created After (YYYY-MM-DD):',
+        summaryDateBeforeLabel: 'Summary Created Before (YYYY-MM-DD):',
+        summaryIsConfirmedLabel: 'Is Confirmed:',
+        confirmedOptionAny: 'Any',
+        confirmedOptionYes: 'Yes',
+        confirmedOptionNo: 'No',
+        downloadHealthSummariesButtonText: 'Download Health Summaries CSV',
+        noFiltersAppliedHealthSummaries: 'No filters applied for Health Summaries. This will export all accessible health summaries.',
+    };
+}
+
+// --- Component ---
+export default function DeveloperPage({ params: paramsPromise }: DeveloperPageProps) { // params переименован в paramsPromise и тип изменен
+    const actualParams = use(paramsPromise); // Разворачиваем Promise с помощью React.use()
+    const { locale } = actualParams; // Теперь locale извлекается из разрешенного объекта
+
+    const [pageContent, setPageContent] = useState<DeveloperPageContent>(getDefaultEnglishContent());
     const [isContentLoading, setIsContentLoading] = useState(true);
-    const [isDownloading, setIsDownloading] = useState(false);
+    const [isDownloadingTestResults, setIsDownloadingTestResults] = useState(false);
+    const [isDownloadingHealthSummaries, setIsDownloadingHealthSummaries] = useState(false);
     const [feedback, setFeedback] = useState<{ message: string | null; type: 'info' | 'error' | 'success' }>({ message: null, type: 'info' });
     const [authToken, setAuthToken] = useState<string | null>(null);
-    const [isAuthTokenChecked, setIsAuthTokenChecked] = useState(false); // To know when token check is done
+    const [isAuthTokenChecked, setIsAuthTokenChecked] = useState(false);
 
-    // **IMPORTANT**: Define the actual backend URL that serves the CSV
-    const BACKEND_CSV_API_URL = `${process.env.NEXT_PUBLIC_STARTING_BASE || ''}/api/data/export-all-csv`;
+    // Test Results Filter States
+    const [analyteNameInput, setAnalyteNameInput] = useState('');
+    const [testDateAfter, setTestDateAfter] = useState('');
+    const [testDateBefore, setTestDateBefore] = useState('');
 
-    // Load auth token from localStorage on component mount
+    // Health Summaries Filter States
+    const [summaryDateAfter, setSummaryDateAfter] = useState('');
+    const [summaryDateBefore, setSummaryDateBefore] = useState('');
+    const [summaryIsConfirmed, setSummaryIsConfirmed] = useState('');
+
+    const [isLoadingFilterOptions, setIsLoadingFilterOptions] = useState(false); 
+    const [optionLoadingError, setOptionLoadingError] = useState<string | null>(null); 
+
     useEffect(() => {
-        const token = localStorage.getItem('authToken'); // Or however your app makes the token available client-side
+        const token = localStorage.getItem('authToken');
         setAuthToken(token);
-        setIsAuthTokenChecked(true); // Mark that we've attempted to load the token
+        setIsAuthTokenChecked(true);
     }, []);
 
-    // Fetch localized content
     useEffect(() => {
-        const fetchContent = async () => {
+        const fetchContent = async () => { 
             setIsContentLoading(true);
-            // setFeedback({ message: null, type: 'info' }); // Cleared when attempting download
             try {
-                const content = await getLocalizedContent(locale, 'dev_download_page') as DownloadPageContent;
-                if (content) {
-                    setPageContent(content);
-                } else {
-                    throw new Error(`Localization for '${locale}' on 'dev_download_page' not found.`);
-                }
+                // locale теперь доступен здесь после use(paramsPromise)
+                const contentFromCMS = await getLocalizedContent(locale, 'developer_page') as DeveloperPageContent;
+                setPageContent({ ...getDefaultEnglishContent(), ...contentFromCMS });
             } catch (error: any) {
-                console.error("Error loading page content:", error.message);
-                setPageContent({ // Basic English Fallback
-                    pageTitle: 'Secure Data Export',
-                    downloadButtonText: 'Download Full Data Archive (CSV)',
-                    downloadingMessage: 'Preparing your download...',
-                    downloadErrorOccurred: 'Download failed. Please try again later.',
-                    tokenUnavailableError: 'Authentication token not found. Please ensure you are logged in correctly and try again.',
-                    loadingMessage: 'Loading Page...',
-                });
-                setFeedback({ message: `Error: Could not load page text. (${error.message})`, type: 'error' });
-            } finally {
-                setIsContentLoading(false);
+                console.error("Error loading page content from CMS:", error.message);
+                setFeedback({ message: `Error: Could not load page text. (${error.message}) Using defaults.`, type: 'error' });
             }
+            setIsContentLoading(false);
         };
-        if (locale) fetchContent();
-    }, [locale]);
 
-    const handleDownload = async () => {
+        if (locale && isAuthTokenChecked) { // locale будет доступен после разрешения Promise
+            fetchContent();
+        }
+    }, [locale, isAuthTokenChecked]);
+
+    const commonDownloadLogic = async (
+        apiUrl: string, 
+        queryParams: URLSearchParams, 
+        setIsDownloadingState: (isDownloading: boolean) => void,
+        successMessageKey: keyof DeveloperPageContent,
+        defaultFilenamePrefix: string
+    ) => {
         if (!authToken) {
-            // This case should ideally not be hit if auth is handled upstream,
-            // but it's a client-side safeguard.
-            setFeedback({ message: pageContent?.tokenUnavailableError || "Authentication token is missing. Please re-login.", type: 'error' });
+            setFeedback({ message: pageContent.tokenUnavailableError, type: 'error' });
             return;
         }
-
-        setFeedback({ message: pageContent?.downloadingMessage || "Initiating download...", type: 'info' });
-        setIsDownloading(true);
+        setFeedback({ message: pageContent.downloadingMessage, type: 'info' });
+        setIsDownloadingState(true);
+        
+        const apiUrlWithParams = `${apiUrl}?${queryParams.toString()}`;
 
         try {
-            const response = await triggerBackendCsvDownload(authToken, BACKEND_CSV_API_URL);
-
+            const response = await triggerBackendCsvDownload(authToken, apiUrlWithParams);
             const contentDisposition = response.headers.get('Content-Disposition');
-            let filename = `data_export_${new Date().toISOString().slice(0,10)}.csv`; // Default
+            let filename = `${defaultFilenamePrefix}_${new Date().toISOString().slice(0,10)}.csv`;
             if (contentDisposition) {
                 const filenameMatch = contentDisposition.match(/filename="?(.+?)"?(;|$)/i);
-                if (filenameMatch && filenameMatch[1]) {
-                    filename = filenameMatch[1];
-                }
+                if (filenameMatch && filenameMatch[1]) filename = filenameMatch[1];
             }
-
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.style.display = 'none'; a.href = url; a.download = filename;
             document.body.appendChild(a); a.click();
             window.URL.revokeObjectURL(url); document.body.removeChild(a);
-
-            setFeedback({ message: `Download "${filename}" started successfully! Check your downloads folder.`, type: 'success' });
+            setFeedback({ message: pageContent[successMessageKey] as string || `Download "${filename}" started!`, type: 'success' });
             setTimeout(() => setFeedback({ message: null, type: 'info' }), 7000);
-
         } catch (err: any) {
             console.error("Download process error:", err);
-            setFeedback({ message: err.message || pageContent?.downloadErrorOccurred || "An error occurred during download.", type: 'error' });
+            setFeedback({ message: err.message || pageContent.downloadErrorOccurred, type: 'error' });
         } finally {
-            setIsDownloading(false);
+            setIsDownloadingState(false);
         }
     };
 
-    // Initial loading state for content or token check
-    if (isContentLoading || !pageContent || !isAuthTokenChecked) {
+    const handleDownloadTestResults = async () => {
+        const queryParams = new URLSearchParams();
+        if (analyteNameInput) queryParams.append('analyte_name', analyteNameInput);
+        if (testDateAfter) queryParams.append('test_date_after', testDateAfter);
+        if (testDateBefore) queryParams.append('test_date_before', testDateBefore);
+        
+        await commonDownloadLogic(
+            TEST_RESULTS_CSV_API_URL,
+            queryParams,
+            setIsDownloadingTestResults,
+            'feedbackSuccess',
+            "test_results_export"
+        );
+    };
+
+    const handleDownloadHealthSummaries = async () => {
+        const queryParams = new URLSearchParams();
+        if (summaryDateAfter) queryParams.append('created_at_after', summaryDateAfter);
+        if (summaryDateBefore) queryParams.append('created_at_before', summaryDateBefore);
+        if (summaryIsConfirmed === 'true' || summaryIsConfirmed === 'false') {
+            queryParams.append('is_confirmed', summaryIsConfirmed);
+        }
+        
+        await commonDownloadLogic(
+            HEALTH_SUMMARIES_CSV_API_URL,
+            queryParams,
+            setIsDownloadingHealthSummaries,
+            'feedbackSuccess',
+            "health_summaries_export"
+        );
+    };
+
+    const clearAllFilters = () => {
+        setAnalyteNameInput('');
+        setTestDateAfter('');
+        setTestDateBefore('');
+        setSummaryDateAfter('');
+        setSummaryDateBefore('');
+        setSummaryIsConfirmed('');
+        setFeedback({ message: null, type: 'info' });
+    };
+
+    if (isContentLoading || !isAuthTokenChecked) { // locale еще может быть не определен здесь, если paramsPromise не разрешен
         return (
             <div className={styles.loadingPageContainer}>
                 <div className={styles.loadingSpinner}></div>
-                <p>{pageContent?.loadingMessage || 'Loading...'}</p>
+                <p>{getDefaultEnglishContent().loadingMessage}</p> {/* Используем дефолтное сообщение, пока locale не доступен */}
             </div>
         );
     }
 
-    // If token check is done and token is still missing (safeguard)
     if (!authToken) {
         return (
             <div className={styles.pageWrapper}>
                 <div className={styles.pageContainer}>
-                     <div className={styles.controlsHeaderMinimal}>
-                        <LanguageSwitcher />
-                    </div>
+                    <div className={styles.controlsHeaderMinimal}><LanguageSwitcher /></div>
                     <h1 className={styles.pageTitle}>{pageContent.pageTitle}</h1>
-                    <div className={styles.errorMessageSection}> {/* Consistent section styling */}
-                        <p className={`${styles.feedbackMessage} ${styles.error}`}>
-                            {pageContent.tokenUnavailableError}
-                        </p>
-                        {/* Optionally, you could add a button here to redirect to login or homepage */}
-                        {/* <button onClick={() => router.push('/login')} className={styles.button}>Go to Login</button> */}
+                    <div className={styles.errorMessageSection}>
+                        <p className={`${styles.feedbackMessage} ${styles.error}`}>{pageContent.tokenUnavailableError}</p>
                     </div>
                 </div>
             </div>
         );
     }
 
-    // Main content: Download button
+    const noTestResultFiltersApplied = !analyteNameInput && !testDateAfter && !testDateBefore;
+    const noHealthSummaryFiltersApplied = !summaryDateAfter && !summaryDateBefore && !summaryIsConfirmed;
+
     return (
         <div className={styles.pageWrapper}>
             <div className={styles.pageContainer}>
-                <div className={styles.controlsHeaderMinimal}> {/* More discreet header */}
-                    <LanguageSwitcher />
-                    {/* Logout button is removed from this page as per requirement */}
-                </div>
-
+                <div className={styles.controlsHeaderMinimal}><LanguageSwitcher /></div>
                 <h1 className={styles.pageTitle}>{pageContent.pageTitle}</h1>
 
-                <div className={styles.downloadActionSection}>
-                    <button
-                        onClick={handleDownload}
-                        disabled={isDownloading}
-                        className={`${styles.button} ${styles.mainDownloadButton}`}
-                    >
-                        {isDownloading ? pageContent.downloadingMessage : pageContent.downloadButtonText}
-                    </button>
-                </div>
-
-                {feedback.message && (
-                    <p className={`${styles.feedbackMessage} ${feedback.type === 'error' ? styles.error : (feedback.type === 'success' ? styles.success : styles.info)}`}>
+                {feedback.message && !optionLoadingError && (
+                    <p className={`${styles.feedbackMessage} ${styles.feedbackBase} ${styles[feedback.type]}`}>
                         {feedback.message}
                     </p>
                 )}
+                {isLoadingFilterOptions && <p className={styles.infoMessage}>{pageContent.fetchingFilterOptions}</p>}
+                {optionLoadingError && <p className={`${styles.feedbackMessage} ${styles.error}`}>{pageContent.errorLoadingOptions}</p>}
+                
+                <div className={styles.formActionsGlobal}>
+                    <button type="button" onClick={clearAllFilters} className={`${styles.button} ${styles.secondaryButton}`}>
+                        {pageContent.clearFiltersButtonText}
+                    </button>
+                </div>
+
+                {/* --- Test Results Export Section --- */}
+                <section className={`${styles.exportSection} ${styles.borderedSection}`}>
+                    <h2 className={styles.sectionTitle}>{pageContent.testResultsExportTitle}</h2>
+                    <form className={styles.filterForm} onSubmit={(e: FormEvent) => { e.preventDefault(); handleDownloadTestResults(); }}>
+                        <h3 className={styles.subSectionTitle}>{pageContent.filtersTitle}</h3>
+                        <div className={styles.filterGrid}>
+                            <div className={styles.filterItem}>
+                                <label htmlFor="analyteNameInput" className={styles.label}>{pageContent.analyteNameLabel}</label>
+                                <input type="text" id="analyteNameInput" value={analyteNameInput} onChange={(e) => setAnalyteNameInput(e.target.value)} className={styles.input} placeholder="e.g., Hemoglobin" />
+                            </div>
+                            <div className={styles.filterItem}>
+                                <label htmlFor="testDateAfter" className={styles.label}>{pageContent.testDateAfterLabel}</label>
+                                <input type="date" id="testDateAfter" value={testDateAfter} onChange={(e) => setTestDateAfter(e.target.value)} className={styles.input} />
+                            </div>
+                            <div className={styles.filterItem}>
+                                <label htmlFor="testDateBefore" className={styles.label}>{pageContent.testDateBeforeLabel}</label>
+                                <input type="date" id="testDateBefore" value={testDateBefore} onChange={(e) => setTestDateBefore(e.target.value)} className={styles.input} />
+                            </div>
+                        </div>
+                        <div className={styles.formActions}>
+                            <button type="submit" disabled={isDownloadingTestResults || isLoadingFilterOptions} className={`${styles.button} ${styles.mainDownloadButton}`}>
+                                {isDownloadingTestResults ? pageContent.downloadingMessage : pageContent.downloadButtonText}
+                            </button>
+                        </div>
+                        {noTestResultFiltersApplied && <p className={styles.infoMessage}>{pageContent.noFiltersAppliedTestResults}</p>}
+                    </form>
+                </section>
+
+                {/* --- Health Summaries Export Section --- */}
+                <section className={`${styles.exportSection} ${styles.borderedSection}`}>
+                    <h2 className={styles.sectionTitle}>{pageContent.healthSummaryExportTitle}</h2>
+                    <form className={styles.filterForm} onSubmit={(e: FormEvent) => { e.preventDefault(); handleDownloadHealthSummaries(); }}>
+                        <h3 className={styles.subSectionTitle}>{pageContent.filtersTitle}</h3>
+                        <div className={styles.filterGrid}>
+                            <div className={styles.filterItem}>
+                                <label htmlFor="summaryDateAfter" className={styles.label}>{pageContent.summaryDateAfterLabel}</label>
+                                <input type="date" id="summaryDateAfter" value={summaryDateAfter} onChange={(e) => setSummaryDateAfter(e.target.value)} className={styles.input} />
+                            </div>
+                            <div className={styles.filterItem}>
+                                <label htmlFor="summaryDateBefore" className={styles.label}>{pageContent.summaryDateBeforeLabel}</label>
+                                <input type="date" id="summaryDateBefore" value={summaryDateBefore} onChange={(e) => setSummaryDateBefore(e.target.value)} className={styles.input} />
+                            </div>
+                            <div className={styles.filterItem}>
+                                <label htmlFor="summaryIsConfirmed" className={styles.label}>{pageContent.summaryIsConfirmedLabel}</label>
+                                <select id="summaryIsConfirmed" value={summaryIsConfirmed} onChange={(e) => setSummaryIsConfirmed(e.target.value)} className={styles.select}>
+                                    <option value="">{pageContent.confirmedOptionAny}</option>
+                                    <option value="true">{pageContent.confirmedOptionYes}</option>
+                                    <option value="false">{pageContent.confirmedOptionNo}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className={styles.formActions}>
+                            <button type="submit" disabled={isDownloadingHealthSummaries || isLoadingFilterOptions} className={`${styles.button} ${styles.mainDownloadButton}`}>
+                                {isDownloadingHealthSummaries ? pageContent.downloadingMessage : pageContent.downloadHealthSummariesButtonText}
+                            </button>
+                        </div>
+                        {noHealthSummaryFiltersApplied && <p className={styles.infoMessage}>{pageContent.noFiltersAppliedHealthSummaries}</p>}
+                    </form>
+                </section>
             </div>
         </div>
     );
 }
+
