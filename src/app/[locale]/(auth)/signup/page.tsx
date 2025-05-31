@@ -7,40 +7,57 @@ import Image from 'next/image';
 
 // Define expected content structure for signup.json (or default.json)
 interface SignUpContent {
-    title: string;
+    title?: string;
     emailLabel: string;
     emailPlaceholder: string;
+    usernameLabel: string;
+    usernamePlaceholder: string;
     passwordLabel: string;
     passwordPlaceholder?: string;
-    confirmPasswordLabel?: string;
+    confirmPasswordLabel?: string; // Используем это для password2
     confirmPasswordPlaceholder?: string;
     submitButton: string;
-    loginPrompt?: string; // "Already have an account?"
-    loginLinkText?: string; // "Login"
     loadingText?: string;
     passwordMismatchError?: string;
+    reg_error?: string;
+    successMessage?: string;
+    loginPrompt:string;
+    loginLinkText:string;
 }
 
 type locale = Promise<{ locale: string }>;
 
 export default async function SignUpPage({ params }: { params: locale }) {
     const locale = (await params).locale;
-    let content: SignUpContent | null = null;
+    let content: SignUpContent ={ 
+        title : "Create Account",
+        emailLabel : "Email Address",
+        emailPlaceholder : "you@example.com",
+        passwordLabel : "Password",
+        passwordPlaceholder : "Create a password (min. 8 characters)",
+        confirmPasswordLabel : "Confirm Password",
+        confirmPasswordPlaceholder : "Enter password again",
+        submitButton : "Sign Up",
+        loadingText : "Creating account...",
+        loginPrompt : "Already have an account?",
+        loginLinkText : "Login",
+        passwordMismatchError : "Passwords do not match.",
+        usernamePlaceholder :"username",
+        usernameLabel :"Username",
+        reg_error :"Registration failed. Please change the username or email and try again.",
+        successMessage :"Successfully registered! An email has been sent to your address. Please check your inbox (and spam folder) to activate your account."
+    };
     // Simplified error handling for brevity
     try {
         content = await getLocalizedContent(locale, 'signup') as SignUpContent;
     } catch (error) { console.error("Error loading signup content:", error); }
-
-    if (!content) { // Basic fallback if content fails
-        content = { title: 'Sign Up', emailLabel: 'Email', emailPlaceholder: 'Enter email', passwordLabel: 'Password', submitButton: 'Sign Up', loginPrompt: 'Already have an account?', loginLinkText: 'Login'};
-    }
 
     return (
         <div className={styles.pageContainer}>
             {/* Left Column */}
             <div className={styles.imageColumn}>
                  <Image
-                    src="/sign_up_cat.svg" // Replace with your image path
+                    src="/sign_up_cat.png" // Replace with your image path
                     alt="Sign up illustration"
                     fill
                     priority

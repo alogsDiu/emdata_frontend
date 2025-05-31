@@ -25,7 +25,20 @@ interface SignUpContent {
     reg_error?: string;
     successMessage?: string;
 }
-
+// interface SignUpContent { //the thingy which is in there 
+//     title: string;
+//     emailLabel: string;
+//     emailPlaceholder: string;
+//     passwordLabel: string;
+//     passwordPlaceholder?: string;
+//     confirmPasswordLabel?: string;
+//     confirmPasswordPlaceholder?: string;
+//     submitButton: string;
+//     loginPrompt?: string; // "Already have an account?"
+//     loginLinkText?: string; // "Login"
+//     loadingText?: string;
+//     passwordMismatchError?: string;
+// }
 interface SignUpFormProps {
     content: SignUpContent;
     locale: string;

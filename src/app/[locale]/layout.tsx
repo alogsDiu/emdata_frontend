@@ -29,18 +29,14 @@ export const metadata: Metadata = {
   },
 };
 
-type locale = Promise<{ locale: string }>;
-
 export default async function RootLayout({
   children,
-  params
-}: Readonly<{
+  params,
+}: {
   children: React.ReactNode;
-  params: locale;
-}>) {
-  
-  let locale = (await params).locale;
-
+  params: { locale: string };
+}) {
+  const { locale } = await params;
   return (
     <html lang={locale}>
       <body className={`${geistSans.variable} ${geistMono.variable} ${nunitoSans.variable}`}>

@@ -3,21 +3,22 @@ import Sidebar from './components/Sidebar';
 import styles from './page.module.css';
 import { SidebarContent } from '@/types';
 import LanguageSwitcher from '@/components/general/LanguageSwitcher';
-import Image from 'next/image';
 import { DashboardProvider } from './DashboardContext';
-import { LogoutButton } from './components/LogoutButton';
 import UserProfileHeader from './components/UserProfileHeader';
 
-type locale = Promise<{ locale: string }>;
-
-export default async function DashboardLayout({
-  children,
-  params
-}: {
+interface RootLayoutProps {
   children: React.ReactNode;
-  params:locale;
-}) {
-  const locale = (await params).locale;
+  params: { locale: string };
+}
+
+export default async function RootLayout({
+  children,
+  params,
+}: RootLayoutProps) {
+  // Await the params object
+  const awaitedParams = await Promise.resolve(params);
+  const { locale } = awaitedParams;
+
   const posible_content:SidebarContent = await getLocalizedContent(locale, 'sidebar');
   const sidebar_content = posible_content? posible_content:{
         labResults: "Lab Results",

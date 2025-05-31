@@ -20,20 +20,21 @@ interface ConfirmEmailPageContent {
 
 // Типизация параметров страницы
 interface ConfirmEmailPageProps {
-    params: {
-      locale: string;
-      key: string;
-    };
+  params: Promise<{ // <--- MODIFIED Hparams: {
+    locale: string;
+    key: string;
+  }>;
   }
     
 
 export default async function ConfirmEmailPage({ params }: ConfirmEmailPageProps) {
-  const resolvedParams = await params; // Дожидаемся параметров
-  const { locale, key } = resolvedParams;
+  // const resolvedParams = await params; // Дожидаемся параметров
+  // const { locale, key } = resolvedParams;
+  const { locale, key } = await params;
   let content: ConfirmEmailPageContent | null = null;
 
-  console.log('KEEY',resolvedParams.key);
-  console.log('LOCALE',resolvedParams.locale);
+  // console.log('KEEY',resolvedParams.key);
+  // console.log('LOCALE',resolvedParams.locale);
 
   try {
     // Загружаем контент для ключа 'confirm-email'

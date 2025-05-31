@@ -2,32 +2,39 @@
 import LanguageSwitcher from '@/components/general/LanguageSwitcher'; // Adjust path if needed
 import styles from './page.module.css'; // Common styles for auth pages
 import Link from 'next/link';
+import React from 'react'; // Import React if using React.ReactNode
 
-// Reuse type if defined elsewhere, otherwise define here
+// 1. Define the props type correctly
+interface AuthLayoutProps {
+  children: React.ReactNode;
+  params: Promise<{
+    locale: string; // params is an object containing the locale string directly
+  }>;
+}
 
-type locale = Promise<{ locale: string }>;
-
+// 2. Use the correct props type in the function signature
 export default async function AuthLayout({
   children,
-  params
-}: {
-  children: React.ReactNode;
-  params: locale; // Use defined type
-}) {
-  const locale = (await params).locale;
+  params // params is now correctly typed as { locale: string }
+}: AuthLayoutProps) {
+
+  // 3. Access locale directly from the params object - NO 'await'!
+  const { locale } = await params;
+
+  // You can now use the locale variable directly
   const homeHref = `/${locale}`; // Link back to the localized home page
 
+  // You can still perform other async operations here if needed
+  // Example: const someServerData = await fetchSomeData(locale);
+
   return (
-    // Applying a general page class if needed, e.g., for background
-    <div className={styles.authPageWrapper}> 
-      <header className={styles.authHeader}> {/* Use specific header style */}
+    <div className={styles.authPageWrapper}>
+      <header className={styles.authHeader}>
         <Link href={homeHref}>
-          {/* Removed h2 for simpler structure, style span if needed */}
           <span className={styles.authLogoText}>EMDATA</span>
         </Link>
         <LanguageSwitcher />
       </header>
-      {/* The children (signup, login, forgotpassword pages) will contain the two-column layout */}
       <main className={styles.authMainContent}>
          {children}
       </main>

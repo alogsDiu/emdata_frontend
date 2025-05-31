@@ -6,15 +6,22 @@ import { getLocalizedContent } from '@/lib/i18n'; // Assuming path is correct
 import { motion } from 'framer-motion';
 import PlusThingy from '@/components/dashboard/PlusThingy';
 
-type locale = Promise<{ locale: string }>;
+interface PageResolvedParams {
+  locale: string;
+}
 
-export default async function Home({
-  params
-}: {
-  params: locale
-}) {
-  let locale = (await params).locale;
-  const content = await getLocalizedContent( locale, 'default');
+interface HomeProps {
+  params: Promise<PageResolvedParams>;
+}
+export default async function Home({ params }: HomeProps) {
+  // Await the 'params' Promise to get the actual parameters object.
+  const resolvedParams: PageResolvedParams = await params;
+  const locale: string = resolvedParams.locale;
+
+  // Alternatively, you can destructure directly after awaiting:
+  // const { locale } = await params;
+
+  const content = await getLocalizedContent(locale, 'default');
 
   return (
     <div className={styles.pageContainer}>

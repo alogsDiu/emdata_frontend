@@ -52,9 +52,9 @@ export default async function LoginPage({ params }: { params: locale }) {
         <div className={styles.pageContainer}>
             {/* Left Column */}
             <div className={styles.imageColumn}>
-                 <Image
-                    src="/sign_in_cat.svg" // Замени на свой путь
-                    alt="Login illustration"
+                <Image
+                    src="/sign_in_cat.png" // Replace with your image path
+                    alt="Sign in illustration"
                     fill
                     priority
                     className={styles.formImage}
