@@ -9,6 +9,7 @@
     background-color: #111; /* Background color moved to container for full height */
     flex-shrink: 0; /* Prevent sidebar from shrinking in flex layout */
     width: 250px; /* Default expanded width */
+    height: 100vh;
 }
 .sidebarContainer.collapsed {
     width: 60px; /* Collapsed width - adjust based on your icon size */
